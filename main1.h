@@ -1,0 +1,8 @@
+#include "Gate.h"
+#include "InputGate.h"
+#include "ANDx.h"
+#include "ORx.h"
+#include "NOTx.h"
+#include "NANDx.h"
+#include "NORx.h"
+#include "XORx.h"
