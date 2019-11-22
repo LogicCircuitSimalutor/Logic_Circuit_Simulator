@@ -1,3 +1,4 @@
+/* Check number of inputs*/
 #ifndef _GATE_H_
 #define _GATE_H_
 
@@ -78,6 +79,16 @@ public:
 	void addOutput(Gate* g);
 
 	void changeDeltaOnOutput();
+
+	bool CheckNumberInputs();
+
+	int getSizeInput() const{
+		return m_input.size();
+	}
+
+	int getNbInput() const{
+		return m_NbINput;
+	}
 
 	virtual void connectGate(Gate* g) = 0;
 

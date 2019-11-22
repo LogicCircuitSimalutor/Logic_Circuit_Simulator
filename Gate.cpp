@@ -52,3 +52,10 @@ void Gate::changeDeltaOnOutput(){
 void Gate::CalculateOutput() {
 
 }
+
+bool Gate::CheckNumberInputs(){
+	if(getSizeInput() != getNbInput()){
+		return false;
+	}
+	return true;
+}
