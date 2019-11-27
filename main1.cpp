@@ -17,7 +17,7 @@ int main(int argc, char const *argv[]){
 
 	//Inputs & Gates initialization
 
-	Gate* IN1 = new InputGate("IN1", 0);
+	Gate* IN1 = new InputGate("IN1", 1);
 	Gate* IN2 = new InputGate("IN2", 1);
 	Gate* IN3 = new InputGate("IN3", 0);
 	Gate* IN4 = new InputGate("IN4", 1);
