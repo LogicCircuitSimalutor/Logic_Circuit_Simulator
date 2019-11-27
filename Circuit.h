@@ -10,12 +10,14 @@ using namespace std;
 
 class Circuit {
 	string m_name;
+	int m_level;
 	vector <Gate * > m_gates;
 	vector <Gate * > m_inputs;
+	vector <vector <Gate * > > m_stageGates;
 
 public:
 
-	Circuit(string name) : m_name(name){
+	Circuit(string name) : m_name(name), m_level(0){
 
 	}
 
@@ -29,6 +31,14 @@ public:
 
 	string getName() const{
 		return m_name;
+	}
+
+	void setLevel(const int level){
+		m_level = level;
+	}
+
+	int getLevel() const{
+		return m_level;
 	}
 
 	int getNbGates() const{
@@ -49,15 +59,21 @@ public:
 
 	bool addGate(Gate* g);
 
+	bool addInput(Gate* i);
+
 	bool deleteGate(const string & name);
 
 	bool checkGlobalConnection();
 
 	bool calculateDelta();
 
-	void sortGate(); //todo
+	bool sortGate() const; //todo
 
-	void simulate(); //todo
+	void simulate() const; //todo
+
+	void applyInputs() const; //todo
+
+	//fonction test unicité nom
 
 	friend ostream& operator<<(ostream& out, Circuit &c){
 		c.print(out);

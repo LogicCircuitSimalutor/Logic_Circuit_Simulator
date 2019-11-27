@@ -16,6 +16,7 @@ class Gate {
 	vector <Gate*> m_input;
 	vector <Gate*> m_output;
 	int m_NbINput;
+	int m_level;
 
 
 public:
@@ -25,7 +26,8 @@ public:
 	m_name(name), 
 	m_logicState(logicState),
 	m_delta(1),
-	m_NbINput(NbInput){
+	m_NbINput(NbInput),
+	m_level(5000000){
 
 	}
 
@@ -58,12 +60,12 @@ public:
 		return m_delta;
 	}
 
-	void setOutput(Gate &g){
-		
+	int getLevel() const{
+		return m_level;
 	}
 
-	void setInput(Gate &g){
-		//push dans vector
+	void setLevel(const int level){
+		m_level = level;
 	}
 
 	const vector <Gate * >* getInput() const{

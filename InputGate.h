@@ -15,7 +15,7 @@ public:
 	InputGate(string name, bool logicState = 0) : 
 	Gate(name, 0, logicState)
 	{
-
+		setLevel(0);
 	}
 
 	~InputGate();
