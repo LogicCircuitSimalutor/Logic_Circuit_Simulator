@@ -11,6 +11,7 @@
 #include "NANDx.h"
 #include "NORx.h"
 #include "XORx.h"
+#include "Circuit.h"
 #include <set>
 #include <vector>
 
@@ -21,8 +22,7 @@ private:
 bool CircuitCreated = 0;
 string m_dot_path = "";
 std::set<string> noms;
-std::vector<Gate*> vectorGate;
-std::vector<Gate*> vectorInput;
+Circuit * m_circuit;
 public:
 
   	Parseur(string dot_path);
@@ -34,7 +34,10 @@ public:
     bool UselessLine(string line);
     string getPath();
     void setPath(string dot_path);
-
+    Circuit * getCircuit()
+    {
+      return m_circuit;
+    }
     friend ostream& operator <<(ostream& out, const  Parseur &f);
 
 };
