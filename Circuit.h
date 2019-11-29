@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
 #include "Gate.h"
 
 using namespace std;
@@ -67,7 +68,7 @@ public:
 
 	bool calculateDelta();
 
-	bool sortGate() const; //todo
+	bool sortGate(map< int, vector<Gate *> >* gateSorted) const; //todo
 
 	void simulate() const; //todo
 
