@@ -253,15 +253,15 @@ void Parseur::CreateGates()
             // cout << "input = " << name << endl;
 
           }
-          else if(label=="OUTPUT")
-          {
-
-           //cout << " Déclaration de la sortie avec le nom unique " << name << ", un label "<< label <<endl;
-           Gate* OUT = new InputGate(name);
-           m_circuit->addInput(OUT);
-           noms.insert(name);
-
-         }
+         //  else if(label=="OUTPUT")
+         //  {
+         //
+         //   //cout << " Déclaration de la sortie avec le nom unique " << name << ", un label "<< label <<endl;
+         //   Gate* OUT = new InputGate(name);
+         //   m_circuit->addGate(OUT);
+         //   noms.insert(name);
+         //
+         // }
           else if(label == "NOT")
           {
             //cout << " Déclaration de la gate avec le nom unique " << name << " du type NOT, un label "<< label <<endl;
