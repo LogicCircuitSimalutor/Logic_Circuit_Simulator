@@ -29,6 +29,7 @@ void Parseur::CreateCircuit()
   while(getline(myfile,line) )//parcourt le fichier myfile
   {
     nbline++;
+    if(UselessLine(line)) continue;
     // cout << "allo " << endl;
     digraph = line.find("digraph");
     int acc = line.find("{");
@@ -40,7 +41,9 @@ void Parseur::CreateCircuit()
       if(acc >= 0)
       {
         sdigraph = line.substr(tmp+8,acc-tmp-8 );
-        cout << "Nom du circuit est " << sdigraph << endl;
+        Circuit * circuit = new Circuit(sdigraph);
+        m_circuit = circuit;
+        cout << "Nom du circuit est " << m_circuit->getName()  << endl;
         CircuitCreated=1;
       }
 
@@ -50,7 +53,9 @@ void Parseur::CreateCircuit()
     {
       // cout << "digraph found and done" << endl;
       CircuitCreated = 1;
-      cout << "Nom du circuit est " << sdigraph << endl;
+      Circuit * circuit = new Circuit(sdigraph);
+      m_circuit = circuit;
+      cout << "Nom du circuit est " << m_circuit->getName()  << endl;
     }
   }//while getline
   if(!CircuitCreated)
@@ -71,8 +76,12 @@ void Parseur::CreateConnections()
     {
       nbline++;
       if(UselessLine(line)) continue;
-
       line=CleanLine(line);
+      if(int(line.find('}'))>=0)
+      {
+        CircuitCreated = 0;
+        return ;
+      }
       int iin = line.find("->");
       if( iin>=0)
       { //declaration des connexinos
@@ -85,13 +94,13 @@ void Parseur::CreateConnections()
             cout << "input = " << line << "\t" << in << " se connecte à " << out << endl;
             Gate * gIn= NULL;
             Gate * gOut=NULL;
-            for(std::vector<Gate*>::const_iterator it =vectorGate.begin(); it!=vectorGate.end(); ++it)
+            for(std::vector<Gate*>::const_iterator it =m_circuit->getGatesVector()->begin(); it!=m_circuit->getGatesVector()->end(); ++it)
             {
               Gate * tmp = *it;
               if(tmp->getName() == in) gIn=tmp;
               if(tmp->getName() == out) gOut=tmp;
             }
-            for(std::vector<Gate*>::const_iterator it =vectorInput.begin(); it!=vectorInput.end(); ++it)
+            for(std::vector<Gate*>::const_iterator it =m_circuit->getInputsVector()->begin(); it!=m_circuit->getInputsVector()->end(); ++it)
             {
               Gate * tmp = *it;
               if(tmp->getName() == in) gIn=tmp;
@@ -104,17 +113,17 @@ void Parseur::CreateConnections()
             }
             else
             {
-              cout << "/!\/!\/!\    ERROR : Input or output didnt known \t in :" << in << " out : " << out << " | line = " << nbline << endl;
+              cout << "!!!    ERROR : Input or output didnt known \t in :" << in << " out : " << out << " | line = " << nbline << endl;
             }
           }
           else
           {
-            cout << "/!\/!\/!\    ERROR : Input or output didnt known \t in :" << in << " out : " << out << " | line = " << nbline << endl;
+            cout << "!!!    ERROR : Input or output didnt known \t in :" << in << " out : " << out << " | line = " << nbline << endl;
           }
         }
         else
         {
-          cout << "/!\/!\/!\    ERROR : input/output | line =" << nbline << endl;
+          cout << "!!!    ERROR : input/output | line =" << nbline << endl;
           exit(1);
         }
       }//if iin>=0
@@ -135,6 +144,11 @@ void Parseur::CreateGates()
       if(UselessLine(line)) continue;
 
       line=CleanLine(line);
+      if(int(line.find('}'))>=0)
+      {
+        CircuitCreated = 0;
+        return ;
+      }
       // cout << "CreateGates::line = " << line << endl;
 
       int ibracket = line.find('[');
@@ -149,7 +163,7 @@ void Parseur::CreateGates()
         if(ilabel >=0 && ill >=0) label=line.substr(ilabel+7,ill-ilabel-7);
         if (label == "" || name == "")
         {
-          cout << "/!\\/!\\/!\\    ERROR : label | line = " << nbline << endl;
+          cout << "!!!    ERROR : label | line = " << nbline << endl;
           exit(1);
         }
 
@@ -169,38 +183,38 @@ void Parseur::CreateGates()
           if(nbinput!=0 && !noms.count(name))
           {
             //if(typegate_vector.find(typegate)!=0)
-            cout << " Déclaration de la gate avec le nom unique " << name << " du type " << typegate <<  ", un label "<< label << " et il a " << nbinput << " inputs"<<endl;
+            //cout << " Déclaration de la gate avec le nom unique " << name << " du type " << typegate <<  ", un label "<< label << " et il a " << nbinput << " inputs"<<endl;
             if(typegate == "AND")
             {
               Gate* AND = new ANDx(name, nbinput, 0);
-              vectorGate.push_back(AND);
+              m_circuit->addGate(AND);
               noms.insert(name);
             }
             else if (typegate == "OR")
             {
               Gate* OR = new ANDx(name, nbinput, 0);
-              vectorGate.push_back(OR);
+              m_circuit->addGate(OR);
               noms.insert(name);
 
             }
             else if (typegate == "NAND")
             {
               Gate* NAND = new ANDx(name, nbinput, 0);
-              vectorGate.push_back(NAND);
+              m_circuit->addGate(NAND);
               noms.insert(name);
 
             }
             else if (typegate == "NOR")
             {
               Gate* NOR = new ANDx(name, nbinput, 0);
-              vectorGate.push_back(NOR);
+              m_circuit->addGate(NOR);
               noms.insert(name);
 
             }
             else if (typegate == "XOR")
             {
               Gate* XOR = new ANDx(name, nbinput, 0);
-              vectorGate.push_back(XOR);
+              m_circuit->addGate(XOR);
               noms.insert(name);
 
             }
@@ -216,14 +230,14 @@ void Parseur::CreateGates()
             // }
             else
             {
-              cout << "/!\\/!\\/!\\    ERROR : type of gate | line = " << nbline << endl;
+              cout << "!!!    ERROR : type of gate | line = " << nbline << endl;
               exit(1);
             }
           }
           else
           {
-            if(nbinput!=0)   cout << "/!\\/!\\/!\\    ERROR : number of inputs | line = " << nbline << endl;
-            else    cout << "/!\\/!\\/!\\    ERROR : name didnt known | line = " << nbline << endl;
+            if(nbinput!=0)   cout << "!!!    ERROR : number of inputs | line = " << nbline << endl;
+            else    cout << "!!!    ERROR : name didnt known | line = " << nbline << endl;
             exit(1);
           }
           //C'est une gate
@@ -232,30 +246,33 @@ void Parseur::CreateGates()
         {
           if(label=="INPUT")
           {
-            cout << " Déclaration de l'entree avec le nom unique " << name << ", un label "<< label <<endl;
+            //cout << " Déclaration de l'entree avec le nom unique " << name << ", un label "<< label <<endl;
             Gate* IN1 = new InputGate(name);
-            vectorInput.push_back(IN1);
+            m_circuit->addInput(IN1);
             noms.insert(name);
+            // cout << "input = " << name << endl;
 
           }
           else if(label=="OUTPUT")
           {
 
-           cout << " Déclaration de la sortie avec le nom unique " << name << ", un label "<< label <<endl;
+           //cout << " Déclaration de la sortie avec le nom unique " << name << ", un label "<< label <<endl;
            Gate* OUT = new InputGate(name);
-           vectorInput.push_back(OUT);
+           m_circuit->addInput(OUT);
            noms.insert(name);
 
          }
           else if(label == "NOT")
           {
-            cout << " Déclaration de la gate avec le nom unique " << name << " du type NOT, un label "<< label <<endl;
+            //cout << " Déclaration de la gate avec le nom unique " << name << " du type NOT, un label "<< label <<endl;
+            Gate* NOT = new InputGate(name);
             noms.insert(name);
+            m_circuit->addGate(NOT);
 
           }
           else
           {
-            cout << "/!\\/!\\/!\\    ERROR : type | line = " << line  << endl;
+            cout << "!!!    ERROR : type | line = " << line  << endl;
             exit(1);
           }
           //C'est une I/O
@@ -283,7 +300,7 @@ string Parseur::CleanLine(string line)
 
 bool Parseur::UselessLine(string line)
 {
-  bool result = (line == ""  || line[1] == '{'|| line[1] == '%');
+  bool result = (line == ""  || line[1] == '%');
   // cout << "UselessLine::line = " << line<< " result = " << result <<  endl;
   return(result);//detect empty lines or commented ones
 }
@@ -296,13 +313,13 @@ ostream& operator <<(ostream& out, const  Parseur &f)
   //   out << *it << endl;
   // }
   cout << "Noms des inputs" << endl;
-  for(std::vector<Gate*>::const_iterator it =f.vectorInput.begin(); it!=f.vectorInput.end(); ++it)
+  for(std::vector<Gate*>::const_iterator it =f.m_circuit->getGatesVector()->begin(); it!=f.m_circuit->getGatesVector()->end(); ++it)
   {
     Gate * tmp = *it;
     out << *tmp << endl;
   }
   cout << "Noms des gates" << endl;
-  for(std::vector<Gate*>::const_iterator it =f.vectorGate.begin(); it!=f.vectorGate.end(); ++it)
+  for(std::vector<Gate*>::const_iterator it =f.m_circuit->getInputsVector()->begin(); it!=f.m_circuit->getInputsVector()->end(); ++it)
   {
     Gate * tmp = *it;
     out << *tmp << endl;
