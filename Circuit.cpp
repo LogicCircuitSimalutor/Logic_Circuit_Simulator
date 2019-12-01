@@ -15,7 +15,7 @@ bool Circuit::checkGlobalConnection(){
 	return true;
 }
 
-bool Circuit::calculateDelta(){
+bool Circuit::calculateDelta() const{
 	vector <Gate *>::const_iterator itr = m_gates.begin();
 	while(itr != m_gates.end()){
 		Gate * tmp = *itr;
@@ -37,7 +37,7 @@ bool Circuit::addInput(Gate* i){
 	return true;
 }
 
-bool Circuit::sortGate(map< int, vector<Gate *> >* gateSorted) const{
+bool Circuit::sortGate(){
 	int compteurGate = 0;
 	int compteurInput = 0;
 	int level = 0;
@@ -51,7 +51,7 @@ bool Circuit::sortGate(map< int, vector<Gate *> >* gateSorted) const{
 		levelSorted.push_back(tmp);
 		itr++;
 	}
-	gateSorted->insert(pair<int, vector<Gate*>>(level,levelSorted));
+	m_gateSorted.insert(pair<int, vector<Gate*>>(level,levelSorted));
 
 	level++; //Start of Gates sorting
 
@@ -95,10 +95,41 @@ bool Circuit::sortGate(map< int, vector<Gate *> >* gateSorted) const{
 		if(!compteurGate){
 			return false; //rebouclage combinatoire
 		}
-		gateSorted->insert(pair<int, vector<Gate*>>(level,levelSorted));
+		m_gateSorted.insert(pair<int, vector<Gate*>>(level,levelSorted));
 		compteurGate = 0;
 		level++;
 
 	}
 	return true;
+}
+
+void Circuit::simulate() const{
+	int startLevel = 1;
+	//Ajouter la clock
+	//Application des stimulis
+
+	/*> Calcul de Delta if delta = 0 ==> next stimuli else calculation */
+	if(calculateDelta()){
+		/*>Recherche de la première entrée modifiée */
+		// vector <Gate*>::const_iterator itr = m_inputs.begin();
+		// while(itr != m_inputs.end()){
+		// 	Gate* tmp = *itr;
+
+		// 	itr++;
+		// }
+
+		/*>Calcul de delta*/
+		map <int, vector <Gate*>>::const_iterator itr;
+		for (itr = m_gateSorted.begin(); itr != m_gateSorted.end(); ++itr) { 
+        	vector <Gate*>::const_iterator itr_vector = itr->second.begin();
+			while(itr_vector != itr->second.end()){
+				Gate* tmp_gate = *itr_vector;
+				tmp_gate->CalculateOutput();
+				itr_vector++;
+			} 
+    	}
+	}else{
+
+	}
+
 }
