@@ -14,7 +14,7 @@ m_vcd_path(vcd_path)
 }
 
 
-void ParseurVCD::Parser()
+void ParseurVCD::Parser( map<int, vector<bool> > & mapStimulis)
 {
   VCDFile *trace = m_trace;
     if (trace)
@@ -24,7 +24,7 @@ void ParseurVCD::Parser()
         // std::cout << "Date:          " << trace->date << std::endl;
         // std::cout << "Signal count:  " << trace->get_signals()->size() << std::endl;
         // std::cout << "Times Recorded:" << trace->get_timestamps()->size() << std::endl;
-        if (trace->get_signals()->size() == m_circuit->getInputsVector()->size() - 1)//-1 a cause de la sortie qui est add comme input dans le dot
+        if (trace->get_signals()->size() == m_circuit->getInputsVector()->size())
         {
             // std::cout << " [" << signal->size << ":0]";
         }
@@ -64,6 +64,8 @@ void ParseurVCD::Parser()
         for (VCDTime instant : *my_timestamps)
           {
             vectorStimulis.clear();
+            const int time = int(instant);
+            cout << "ottotot" << time << instant << endl;
             for (VCDSignal *cur_signal : *my_signals)
              {
                  //std::cout << "[" << instant <<"] : " << cur_signal->reference  <<endl;
@@ -112,10 +114,16 @@ void ParseurVCD::Parser()
                    switch(val -> get_type()) {
                        case (VCD_SCALAR):
                            //std::cout <<val -> get_value_bit(); //VCDValue::VCDBit2Char(val -> get_value_bit());
-                           vectorStimulis.push_back(val->get_value_bit());
+                           bool bvalue;
+                           bvalue =0;
+                           if(val->get_value_bit() == 1)
+                           {
+                             bvalue =1;
+                           }
+                           vectorStimulis.push_back(bvalue);
                            break;
                        // case (VCD_VECTOR):
-                       //     vecval = val -> get_value_vector();
+                  // mapStimulis     //     vecval = val -> get_value_vector();
                        //     for(auto it = vecval -> begin();
                        //              it != vecval -> end();
                        //              ++it) {
@@ -129,10 +137,9 @@ void ParseurVCD::Parser()
                    }
               //std::cout <<std::endl;
              }
-             mapStimulis[instant]=vectorStimulis;
+             mapStimulis[time]=vectorStimulis;
               i++;
           }
-
 
 
         delete trace;
@@ -159,15 +166,15 @@ void ParseurVCD::setPath(string vcd_path)
 ostream& operator <<(ostream& out, const  ParseurVCD &f)
 {
   out << "\t\t==== Stimulis ====" << endl;
-  for(map<VCDTime, vector<VCDBit> >::const_iterator itr = f.mapStimulis.begin();itr!=f.mapStimulis.end();itr++)
-  {
-    VCDTime time = itr->first;
-    out << "Time = " << time << endl;
-    vector<VCDBit> vectorStimuliss = itr->second;
-    for(int itrv = 0;itrv!=vectorStimuliss.size();itrv++)
-    {
-      out << vectorStimuliss[itrv] << endl;
-    }
-  }
+  // for(map<VCDTime, vector<VCDBit> >::const_iterator itr = f.mapStimulis.begin();itr!=f.mapStimulis.end();itr++)
+  // {
+  //   VCDTime time = itr->first;
+  //   out << "Time = " << time << endl;
+  //   vector<VCDBit> vectorStimuliss = itr->second;
+  //   for(int itrv = 0;itrv!=vectorStimuliss.size();itrv++)
+  //   {
+  //     out << vectorStimuliss[itrv] << endl;
+  //   }
+  // }
   return out;
 }

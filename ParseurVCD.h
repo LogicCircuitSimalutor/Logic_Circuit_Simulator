@@ -25,25 +25,25 @@ string m_vcd_path = "";
 VCDFileParser m_parser;
 VCDFile * m_trace;
 Circuit * m_circuit = NULL;
-map<VCDTime, vector<VCDBit> > mapStimulis;
-vector<VCDBit> vectorStimulis;
+// map<VCDTime, vector<VCDBit> > mapStimulis;
+vector<bool> vectorStimulis;
 
 public:
 
   	ParseurVCD(string vcd_path);
-    void Parser();
+    void Parser( map<int, vector<bool> > & mapStimulis);
     string getPath();
     void connectCircuit(Circuit * circuit);
     void setPath(string vcd_path);
     friend ostream& operator <<(ostream& out, const  ParseurVCD &f);
 
-    vector<VCDBit> * getStimulisVector()
+    vector<bool> * getStimulisVector()
     {
       return & vectorStimulis;
     }
-    map<VCDTime, vector<VCDBit> > * getStimulisMap()
-    {
-      return & mapStimulis;
-    }
+    // map<VCDTime, vector<VCDBit> > * getStimulisMap()
+    // {
+    //   return & mapStimulis;
+    // }
 
 };

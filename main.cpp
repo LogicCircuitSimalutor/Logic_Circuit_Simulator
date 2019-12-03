@@ -12,8 +12,9 @@ using namespace std;
 int main(int argc, char const *argv[]) {
   string dot_path = argv[1];
   string vcd_path = argv[2];
-
-
+  string speriod = argv[3]; //ns
+  int period =atoi(argv[3]); //ns;
+  map<int, vector<bool> > mapStimulis;
 
     Parseur parseur(dot_path);
     parseur.Parser();
@@ -21,8 +22,21 @@ int main(int argc, char const *argv[]) {
 // cout << "Circuit dot ====== " << parseur.getCircuit() <<endl;
     ParseurVCD parseurVCD(vcd_path);
     parseurVCD.connectCircuit(parseur.getCircuit());
-    parseurVCD.Parser();
+    parseurVCD.Parser(mapStimulis);
     cout << parseurVCD;
+
+
+    for(map<int, vector<bool> >::const_iterator itr = mapStimulis.begin();itr!=mapStimulis.end();itr++)
+    {
+      int time = itr->first;
+      cout << "Time = " << time << endl;
+      vector<bool> vectorStimuliss = itr->second;
+      for(int itrv = 0;itrv!=vectorStimuliss.size();itrv++)
+      {
+        cout << vectorStimuliss[itrv] << endl;
+      }
+    }
+
 
   //
   // VCDFileParser parser;
