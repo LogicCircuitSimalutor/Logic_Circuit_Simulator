@@ -83,6 +83,13 @@ void Parseur::CreateConnections()
         return ;
       }
       int iin = line.find("->");
+      // int ilabel = line.find("label=");
+      // int iarrow = line.find("->");
+      // if(iarrow > 0 && iarrow < ilabel)
+      // {
+      //   cout << "slty " << endl;
+      //
+      // }
       if( iin>=0)
       { //declaration des connexinos
         string in = line.substr(0,iin);
@@ -158,6 +165,12 @@ void Parseur::CreateGates()
         // cout << "ibracket = " << ibracket << endl;
         string name=line.substr(0,ibracket);
         int ilabel=line.find("label=\"");
+        // int iarrow = line.find("->");
+        // if(iarrow > 0 && iarrow < ilabel)
+        // {
+        //   cout << "slty " << endl;
+        //   continue; //surement un sel
+        // }
         int ill=line.find("\"]");
         string label="";
         if(ilabel >=0 && ill >=0) label=line.substr(ilabel+7,ill-ilabel-7);
@@ -218,6 +231,13 @@ void Parseur::CreateGates()
               noms.insert(name);
 
             }
+            // else if (typegate == "MUX")
+            // {
+            //   // Gate* XOR = new ANDx(name, nbinput, 0);
+            //   // m_circuit->addGate(XOR);
+            //   noms.insert(name);
+            //
+            // }
             // else if (typegate == "XAND")
             // {
             //   Gate* AND = new ANDx(name, 2, 0);
@@ -253,15 +273,15 @@ void Parseur::CreateGates()
             // cout << "input = " << name << endl;
 
           }
-         //  else if(label=="OUTPUT")
-         //  {
-         //
-         //   //cout << " Déclaration de la sortie avec le nom unique " << name << ", un label "<< label <<endl;
-         //   Gate* OUT = new InputGate(name);
-         //   m_circuit->addGate(OUT);
-         //   noms.insert(name);
-         //
-         // }
+          else if(label=="OUTPUT")
+          {
+
+           //cout << " Déclaration de la sortie avec le nom unique " << name << ", un label "<< label <<endl;
+           // Gate* OUT = new InputGate(name);
+           // m_circuit->addGate(OUT);
+           noms.insert(name);
+
+         }
           else if(label == "NOT")
           {
             //cout << " Déclaration de la gate avec le nom unique " << name << " du type NOT, un label "<< label <<endl;
@@ -300,7 +320,7 @@ string Parseur::CleanLine(string line)
 
 bool Parseur::UselessLine(string line)
 {
-  bool result = (line == ""  || line[1] == '%');
+  bool result = (line == ""  || line[0] == '%');
   // cout << "UselessLine::line = " << line<< " result = " << result <<  endl;
   return(result);//detect empty lines or commented ones
 }
