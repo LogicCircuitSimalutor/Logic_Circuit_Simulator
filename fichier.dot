@@ -8,13 +8,20 @@ digraph toto
 
 
 a[label="AND2"];
+%muxxxxxxxe[label="MUX2"];
+%muxxxxxr[label="MUX2"];
+
 in1[label="INPUT"];
 in2[label="INPUT"];
 in3[label="INPUT"];
 b[label="OR3"];%kkiko
 d[label="XOR20"];
 c[label="OUTPUT"];
-in1->a;
+%in3->muxxxxxxxe[label="SEL"];
+%in2->muxxxxxxxe;
+
+%in1->muxxxxxxxe;
+%in1->muxxxxxr[label="SEL"];
 in2->a;
 a->b;
 in2->b;

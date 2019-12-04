@@ -26,6 +26,10 @@ void ParseurVCD::Parser( map<int, vector<bool> > & mapStimulis)
         // std::cout << "Times Recorded:" << trace->get_timestamps()->size() << std::endl;
         if (trace->get_signals()->size() == m_circuit->getInputsVector()->size())
         {
+            // for(int itr = 0;itr!=trace->get_signals()->size();itr++)
+            // {
+            //
+            // }
             // std::cout << " [" << signal->size << ":0]";
         }
         else
@@ -65,7 +69,7 @@ void ParseurVCD::Parser( map<int, vector<bool> > & mapStimulis)
           {
             vectorStimulis.clear();
             const int time = int(instant);
-            cout << "ottotot" << time << instant << endl;
+            // cout << "ottotot" << time << instant << endl;
             for (VCDSignal *cur_signal : *my_signals)
              {
                  //std::cout << "[" << instant <<"] : " << cur_signal->reference  <<endl;
@@ -148,8 +152,8 @@ void ParseurVCD::Parser( map<int, vector<bool> > & mapStimulis)
 void ParseurVCD::connectCircuit(Circuit * circuit)
  {
    m_circuit = circuit;
-    cout << m_circuit <<endl;
-   cout << circuit;
+   //  cout << m_circuit <<endl;
+   // cout << circuit;
    // circuit->print();
    // cout << "circuit ====================== " <<  m_circuit.print() << *circuit << endl;
  }
@@ -165,7 +169,7 @@ void ParseurVCD::setPath(string vcd_path)
 
 ostream& operator <<(ostream& out, const  ParseurVCD &f)
 {
-  out << "\t\t==== Stimulis ====" << endl;
+  // out << "\t\t==== Stimulis ====" << endl;
   // for(map<VCDTime, vector<VCDBit> >::const_iterator itr = f.mapStimulis.begin();itr!=f.mapStimulis.end();itr++)
   // {
   //   VCDTime time = itr->first;
