@@ -6,6 +6,7 @@
 #include <vector>
 #include <map>
 #include "Gate.h"
+#include "build/VCDTypes.hpp"
 
 using namespace std;
 
@@ -74,9 +75,11 @@ public:
 
 	bool sortGate(); //todo --> done
 
-	void simulate() const; //todo
+	bool simulate(map<int, vector<bool> > * mapStimulis) const; //in progress
 
-	void applyInputs() const; //todo
+	void applyInputs(vector<bool>& InputValues) const; //todo --> done
+
+	int findStartLevel() const;
 
 	//fonction test unicité nom
 
