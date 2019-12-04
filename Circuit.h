@@ -81,8 +81,6 @@ public:
 
 	int findStartLevel() const;
 
-	//fonction test unicité nom
-
 	friend ostream& operator<<(ostream& out, Circuit &c){
 		c.print(out);
 		return out;

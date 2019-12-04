@@ -44,7 +44,7 @@ void NORx::CalculateOutput(){
 		}
 	}
 
-	if(temp_output != this->getLogicState()){
+	if(!temp_output != this->getLogicState()){
  		this->setLogicState(!temp_output);
  		tmp->changeDeltaOnOutput();
 	}

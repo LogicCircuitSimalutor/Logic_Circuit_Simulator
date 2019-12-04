@@ -1,35 +1,43 @@
-digraph toto
+digraph circuit
 
 {
-
-
-
-
-
-
-a[label="AND2"];
-%muxxxxxxxe[label="MUX2"];
-%muxxxxxr[label="MUX2"];
 
 in1[label="INPUT"];
 in2[label="INPUT"];
 in3[label="INPUT"];
-b[label="OR3"];%kkiko
-d[label="XOR20"];
-c[label="OUTPUT"];
-%in3->muxxxxxxxe[label="SEL"];
-%in2->muxxxxxxxe;
+in4[label="INPUT"];
+in5[label="INPUT"];
+in6[label="INPUT"];
+in7[label="INPUT"];
 
-%in1->muxxxxxxxe;
-%in1->muxxxxxr[label="SEL"];
+a[label="AND2"];
+b[label="OR2"];
+c[label="NOT"];
+d[label="NAND3"];
+e[label="XOR4"];
+f[label="NOR2"];
+g[label="NOT"];
+h[label="XOR3"];
+
+in1->a;
 in2->a;
-a->b;
-in2->b;
 in3->b;
+in4->b;
+in4->d;
+in5->e;
+in6->f;
+in7->g;
 
+a->c;
+a->e;
+a->d;
 
-
-in1->d;
 b->d;
-d->c;
+c->e;
+d->e;
+d->f;
+e->h;
+f->h;
+g->h;
+
 }
