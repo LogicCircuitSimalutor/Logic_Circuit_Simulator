@@ -67,56 +67,87 @@ void Parseur::CreateCircuit()
 void Parseur::CreateConnections()
 {
   ifstream myfile(getPath());
-
+// cout << "\t \t CreateConnections CircuitCreated = " << CircuitCreated<< endl;
   int nbline =0;
   string line;
   if(CircuitCreated)
   {
-    while(getline(myfile,line))//parcourt le fichier myfile
+    while(getline(myfile,line) && int(line.find('}'))==-1)//parcourt le fichier myfile
     {
       nbline++;
       if(UselessLine(line)) continue;
       line=CleanLine(line);
-      if(int(line.find('}'))>=0)
-      {
-        CircuitCreated = 0;
-        return ;
-      }
-      int iin = line.find("->");
-      // int ilabel = line.find("label=");
-      // int iarrow = line.find("->");
-      // if(iarrow > 0 && iarrow < ilabel)
+      //cout << "ligne lue " << line << endl;
+      // if(int(line.find('}'))>=0)
       // {
-      //   cout << "slty " << endl;
-      //
+      //   CircuitCreated = 0;
+      //   return ;
       // }
+      int iin = line.find("->");
+      string out="";
       if( iin>=0)
       { //declaration des connexinos
+        // cout << "\t \t iin >= 0 " << endl;
         string in = line.substr(0,iin);
-        string out = line.substr(iin+2,line.size()-iin-3);
-        if(in != "" && out !="")
-        {
-          if(noms.count(in) && noms.count(out))
-          {
-            cout << "input = " << line << "\t" << in << " se connecte à " << out << endl;
-            Gate * gIn= NULL;
-            Gate * gOut=NULL;
-            for(std::vector<Gate*>::const_iterator it =m_circuit->getGatesVector()->begin(); it!=m_circuit->getGatesVector()->end(); ++it)
-            {
-              Gate * tmp = *it;
-              if(tmp->getName() == in) gIn=tmp;
-              if(tmp->getName() == out) gOut=tmp;
-            }
-            for(std::vector<Gate*>::const_iterator it =m_circuit->getInputsVector()->begin(); it!=m_circuit->getInputsVector()->end(); ++it)
-            {
-              Gate * tmp = *it;
-              if(tmp->getName() == in) gIn=tmp;
-              if(tmp->getName() == out) gOut=tmp;
-            }
+        // int ilabel = line.find("[label=");
+        // cout << "\t \t ilabel = " << ilabel << endl;
+        // bool  sel = 0;
+        // if(ilabel >= 0)
+        // {
+        //   cout << "slty " << endl;
+        //   string sSEL = line.substr(ilabel+8,line.size()-ilabel-8-3);
+        //   // cout << "SEL = "<<sSEL << endl;
+        //   if(sSEL == "SEL")    sel=1;
+        //   out = line.substr(iin+2,line.size()-ilabel-iin-3);
+        //   cout << "out = " << out <<endl;
+        // }
+        // else
+        // {
+          out = line.substr(iin+2,line.size()-iin-3);
+          cout << "out = " << out <<endl;;
 
-            if(gIn!=NULL && gOut !=NULL)
+        // }
+          if(in != "" && out !="")
+          {
+            // cout << "out = " << out <<endl;
+
+            if(noms.count(in) && noms.count(out))
             {
-              gIn->connectGate(gOut);
+              cout << "input = " << line << "\t" << in << " se connecte à " << out << endl;
+              Gate * gIn= NULL;
+              Gate * gOut=NULL;
+              for(std::vector<Gate*>::const_iterator it =m_circuit->getGatesVector()->begin(); it!=m_circuit->getGatesVector()->end(); ++it)
+              {
+                Gate * tmp = *it;
+                if(tmp->getName() == in) gIn=tmp;
+                if(tmp->getName() == out) gOut=tmp;
+              }
+              for(std::vector<Gate*>::const_iterator it =m_circuit->getInputsVector()->begin(); it!=m_circuit->getInputsVector()->end(); ++it)
+              {
+                Gate * tmp = *it;
+                if(tmp->getName() == in) gIn=tmp;
+                if(tmp->getName() == out) gOut=tmp;
+              }
+
+              if(gIn!=NULL && gOut !=NULL)
+              {
+                // if(sel)
+                // {
+                //   cout << "YOYOYOOYOYOYOY" << endl;
+                //   cout << gOut << endl;
+                //   // MUXx * mux = gOut;
+                //   Gate * MUX = new MUXx(gOut->getName(),gOut->getNbInput());
+                //   MUX->connectSel(gIn);
+                //   //Gate * tmp = MUX;
+                //   // MUX->MUXx::connectSel(gIn);
+                //   cout << "\t\t\t\t\t je push" << endl;
+                // }
+                gIn->connectGate(gOut);
+              }
+              else
+              {
+                cout << "!!!    ERROR : Input or output didnt known \t in :" << in << " out : " << out << " | line = " << nbline << endl;
+              }
             }
             else
             {
@@ -125,14 +156,10 @@ void Parseur::CreateConnections()
           }
           else
           {
-            cout << "!!!    ERROR : Input or output didnt known \t in :" << in << " out : " << out << " | line = " << nbline << endl;
+            cout << "!!!    ERROR : input/output | line =" << nbline << endl;
+            exit(1);
           }
-        }
-        else
-        {
-          cout << "!!!    ERROR : input/output | line =" << nbline << endl;
-          exit(1);
-        }
+
       }//if iin>=0
     }//while getline
   }//if CircuitCreated
@@ -145,17 +172,18 @@ void Parseur::CreateGates()
   if(CircuitCreated)
   {
     // cout << "CreateGates::CircuitCreated = 1" << endl;
-    while(getline(myfile,line))//parcourt le fichier myfile
+    while(getline(myfile,line)&& int(line.find('}'))==-1)//parcourt le fichier myfile
     {
       nbline++;
       if(UselessLine(line)) continue;
 
       line=CleanLine(line);
-      if(int(line.find('}'))>=0)
-      {
-        CircuitCreated = 0;
-        return ;
-      }
+      // if(int(line.find('}'))>=0)
+      // {
+      //   cout<< "\t\t\t jss mort " << endl;
+      //   CircuitCreated = 0;
+      //   return ;
+      // }
       // cout << "CreateGates::line = " << line << endl;
 
       int ibracket = line.find('[');
@@ -168,7 +196,7 @@ void Parseur::CreateGates()
         // int iarrow = line.find("->");
         // if(iarrow > 0 && iarrow < ilabel)
         // {
-        //   cout << "slty " << endl;
+        //   cout << "slty surement un sel" << endl;
         //   continue; //surement un sel
         // }
         int ill=line.find("\"]");
@@ -233,20 +261,10 @@ void Parseur::CreateGates()
             }
             // else if (typegate == "MUX")
             // {
-            //   // Gate* XOR = new ANDx(name, nbinput, 0);
-            //   // m_circuit->addGate(XOR);
+            //   Gate* MUX = new MUXx(name, nbinput, 0);
+            //   m_circuit->addGate(MUX);
             //   noms.insert(name);
             //
-            // }
-            // else if (typegate == "XAND")
-            // {
-            //   Gate* AND = new ANDx(name, 2, 0);
-            //   vectorGate.push_back(AND);
-            // }
-            // else if (typegate == "MUX")
-            // {
-            //   Gate* AND = new ANDx(name, 2, 0);
-            //   vectorGate.push_back(AND);
             // }
             else
             {
@@ -332,13 +350,13 @@ ostream& operator <<(ostream& out, const  Parseur &f)
   // {
   //   out << *it << endl;
   // }
-  cout << "Noms des inputs" << endl;
+  cout << "Noms des gates" << endl;
   for(std::vector<Gate*>::const_iterator it =f.m_circuit->getGatesVector()->begin(); it!=f.m_circuit->getGatesVector()->end(); ++it)
   {
     Gate * tmp = *it;
     out << *tmp << endl;
   }
-  cout << "Noms des gates" << endl;
+  cout << "Noms des inputs" << endl;
   for(std::vector<Gate*>::const_iterator it =f.m_circuit->getInputsVector()->begin(); it!=f.m_circuit->getInputsVector()->end(); ++it)
   {
     Gate * tmp = *it;
