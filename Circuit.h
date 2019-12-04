@@ -6,6 +6,7 @@
 #include <vector>
 #include <map>
 #include "Gate.h"
+#include "build/VCDTypes.hpp"
 
 using namespace std;
 
@@ -14,7 +15,7 @@ class Circuit {
 	int m_level;
 	vector <Gate * > m_gates;
 	vector <Gate * > m_inputs;
-	vector <vector <Gate * > > m_stageGates;
+	map <int, vector <Gate*>> m_gateSorted;
 
 public:
 
@@ -54,6 +55,10 @@ public:
 		return &m_inputs;
 	}
 
+	const map<int, vector<Gate*>>* getGateSorted() const{
+		return &m_gateSorted;
+	}
+
 	Gate * getGate(const string & name) const;
 
 	void print(ostream& out) const;
@@ -66,13 +71,15 @@ public:
 
 	bool checkGlobalConnection();
 
-	bool calculateDelta();
+	bool calculateDelta() const;
 
-	bool sortGate(map< int, vector<Gate *> >* gateSorted) const; //todo
+	bool sortGate(); //todo --> done
 
-	void simulate() const; //todo
+	bool simulate(map<int, vector<bool> > * mapStimulis) const; //in progress
 
-	void applyInputs() const; //todo
+	void applyInputs(vector<bool>& InputValues) const; //todo --> done
+
+	int findStartLevel() const;
 
 	//fonction test unicité nom
 

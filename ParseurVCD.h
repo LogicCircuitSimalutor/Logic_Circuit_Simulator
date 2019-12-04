@@ -12,7 +12,6 @@
 #include "NANDx.h"
 #include "NORx.h"
 #include "XORx.h"
-#include "Circuit.h"
 #include <set>
 #include <vector>
 #include <map>
