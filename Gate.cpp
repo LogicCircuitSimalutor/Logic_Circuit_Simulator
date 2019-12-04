@@ -54,6 +54,7 @@ void Gate::CalculateOutput() {
 }
 
 bool Gate::CheckNumberInputs(){
+	//cout << "Le nombre d'entrée est : " << getSizeInput() << ", " <<  getNbInput() << endl;
 	if(getSizeInput() != getNbInput()){
 		return false;
 	}

@@ -10,25 +10,90 @@ $scope module logic $end
 $var wire 1 # in1 $end
 $var wire 1 $ in2 $end
 $var wire 1 % in3 $end
+$var wire 1 + in4 $end
+$var wire 1 - in5 $end
+$var wire 1 * in6 $end
+$var wire 1 / in7 $end
 $upscope $end
 $enddefinitions $end
 $dumpvars
 0#
 0$
 0%
+0+
+0-
+0*
+0/
 $end
 #0
 1#
 0$
 0%
-#2211
-#2296
-0#
-1$
-#2302
-0$
+1+
+0-
+0*
+0/
+#1
 1#
-#2303
+1$
+0%
+0+
+0-
+0*
+1/
+#2
+0#
+0$
+1%
+1+
+0-
+0*
+0/
+#3
+0#
+0$
+1%
+1+
+1-
+0*
+0/
+#4
+0#
+0$
+1%
+1+
+1-
+1*
+0/
+#5
+0#
+0$
+1%
+1+
+1-
+1*
+1/
+#6
 0#
 0$
 0%
+0+
+0-
+0*
+0/
+#7
+0#
+0$
+0%
+0+
+1-
+0*
+1/
+#8
+1#
+1$
+1%
+1+
+1-
+1*
+1/

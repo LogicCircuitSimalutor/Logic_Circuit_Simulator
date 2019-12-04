@@ -36,7 +36,7 @@ void NANDx::CalculateOutput(){
 	while(itr != input->end()){
 		Gate * tmp = *itr;
 		temp_output = tmp->getLogicState();
-
+		// cout << "porte nandx value de " << tmp->getName() << " vaut  " << temp_output << endl;
 		if(temp_output == 0){
  			itr = input->end();
 		}else{
@@ -44,7 +44,8 @@ void NANDx::CalculateOutput(){
 		}
 	}
 
-	if(temp_output != this->getLogicState()){
+	if(!temp_output != this->getLogicState()){
+		// cout << "temp_output = " << !temp_output << endl;
  		this->setLogicState(!temp_output);
  		tmp->changeDeltaOnOutput();
 	}

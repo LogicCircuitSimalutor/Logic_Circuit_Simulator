@@ -224,7 +224,7 @@ void Parseur::CreateGates()
           if(nbinput!=0 && !noms.count(name))
           {
             //if(typegate_vector.find(typegate)!=0)
-            //cout << " Déclaration de la gate avec le nom unique " << name << " du type " << typegate <<  ", un label "<< label << " et il a " << nbinput << " inputs"<<endl;
+            cout << " Déclaration de la gate avec le nom unique " << name << " du type " << typegate <<  ", un label "<< label << " et il a " << nbinput << " inputs"<<endl;
             if(typegate == "AND")
             {
               Gate* AND = new ANDx(name, nbinput, 0);
@@ -233,28 +233,28 @@ void Parseur::CreateGates()
             }
             else if (typegate == "OR")
             {
-              Gate* OR = new ANDx(name, nbinput, 0);
+              Gate* OR = new ORx(name, nbinput, 0);
               m_circuit->addGate(OR);
               noms.insert(name);
 
             }
             else if (typegate == "NAND")
             {
-              Gate* NAND = new ANDx(name, nbinput, 0);
+              Gate* NAND = new NANDx(name, nbinput, 0);
               m_circuit->addGate(NAND);
               noms.insert(name);
 
             }
             else if (typegate == "NOR")
             {
-              Gate* NOR = new ANDx(name, nbinput, 0);
+              Gate* NOR = new NORx(name, nbinput, 0);
               m_circuit->addGate(NOR);
               noms.insert(name);
 
             }
             else if (typegate == "XOR")
             {
-              Gate* XOR = new ANDx(name, nbinput, 0);
+              Gate* XOR = new XORx(name, nbinput, 0);
               m_circuit->addGate(XOR);
               noms.insert(name);
 
@@ -291,19 +291,19 @@ void Parseur::CreateGates()
             // cout << "input = " << name << endl;
 
           }
-          else if(label=="OUTPUT")
-          {
+         //  else if(label=="OUTPUT")
+         //  {
 
-           //cout << " Déclaration de la sortie avec le nom unique " << name << ", un label "<< label <<endl;
-           // Gate* OUT = new InputGate(name);
-           // m_circuit->addGate(OUT);
-           noms.insert(name);
+         //   //cout << " Déclaration de la sortie avec le nom unique " << name << ", un label "<< label <<endl;
+         //   // Gate* OUT = new InputGate(name);
+         //   // m_circuit->addGate(OUT);
+         //   noms.insert(name);
 
-         }
+         // }
           else if(label == "NOT")
           {
             //cout << " Déclaration de la gate avec le nom unique " << name << " du type NOT, un label "<< label <<endl;
-            Gate* NOT = new InputGate(name);
+            Gate* NOT = new NOTx(name);
             noms.insert(name);
             m_circuit->addGate(NOT);
 
