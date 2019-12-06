@@ -33,6 +33,39 @@ bool Circuit::addGate(Gate* g){
 	return true;
 }
 
+bool Circuit::addMux(MUXx * g){
+	m_mux.push_back(g);
+	return true;
+}
+
+// bool Circuit::replace(Gate * g)
+// {
+// 	string name = g->getName();
+// 	for(std::vector<Gate*>::iterator it =m_inputs.begin(); it!=m_inputs.end(); ++it)
+// 	{
+// 		Gate * tmp = *it;
+// 		if(tmp->getName() == g->getName())
+// 		{
+// 			MUXx mtoto = new MUXx(g->getName(),g->getNbInput());
+// 			vector <Gate *> toto = tmp->getVectorSel();
+// 			m_inputs.erase(it);
+// 			m_inputs.push_back(g);
+// 			return 1;
+// 		}
+// 	}
+// 	for(std::vector<Gate*>::iterator it =m_gates.begin(); it!=m_gates.end(); ++it)
+// 	{
+// 		Gate * tmp = *it;
+// 		if(tmp->getName() == g->getName())
+// 		{
+// 			m_gates.erase(it);
+// 			m_gates.push_back(g);
+// 			return 1;
+// 		}
+// 	}
+// 	return 0;
+// }
+
 bool Circuit::addInput(Gate* i){
 	m_inputs.push_back(i);
 	return true;
@@ -67,7 +100,7 @@ void Circuit::applyInputs(vector<bool>& InputValues) const{
 int Circuit::findStartLevel() const{
 
 	map <int, vector <Gate*>>::const_iterator itr = m_gateSorted.begin();
-	for (itr++ ; itr != m_gateSorted.end(); itr++) { 
+	for (itr++ ; itr != m_gateSorted.end(); itr++) {
         vector <Gate*>::const_iterator itr_vector = itr->second.begin();
 		while(itr_vector != itr->second.end()){
 			Gate* tmp_gate = *itr_vector;
@@ -75,8 +108,8 @@ int Circuit::findStartLevel() const{
 				return tmp_gate->getLevel();
 			}else{
 				itr_vector++;
-			} 
-		} 
+			}
+		}
     }
     return 0; //erreur lors de la recherche de niveau
 }
@@ -87,7 +120,7 @@ bool Circuit::fillOutputsVector(){
 		Gate * tmp = *itr;
 		if(!(tmp->getSizeOutput())){
 			this->addOutput(tmp);
-		}	
+		}
 		itr++;
 	}
 
@@ -130,7 +163,6 @@ bool Circuit::sortGate(){
 	m_gateSorted.insert(pair<int, vector<Gate*>>(level,levelSorted));
 
 	level++; //Start of Gates sorting
-
 	//Parcours des portes
 	while(NumberSorted != sizeGatesInput){
 		levelSorted.clear();
@@ -148,7 +180,7 @@ bool Circuit::sortGate(){
 			/*>Parcours des Inputs de la Gate */
 			while(itr_gate != input->end()){
 				Gate* tmp_input = *itr_gate;
-				
+
 					/*>Comparaison de niveau */
 					if(tmp_input->getLevel() < level){ //On check la prochaine input
 						itr_gate++;
@@ -156,6 +188,7 @@ bool Circuit::sortGate(){
 					}else{
 					itr_gate = input->end(); //on skip le test sur cette porte
 					}
+
 				}
 
 			}
@@ -212,6 +245,7 @@ bool Circuit::simulate(map<int, vector<bool> > * mapStimulis) const{
 				if(calculateDelta()){
 				/*>Recherche de la première entrée modifiée */
 				/*>Calcul de startLevel*/
+
 				startLevel = findStartLevel();
 
 				/*>START FROM LEVEL WHERE DELTA DIFFERENT OF 0*/
@@ -224,18 +258,21 @@ bool Circuit::simulate(map<int, vector<bool> > * mapStimulis) const{
 						itr++;
 					}
 
-					for ( ; itr != m_gateSorted.end(); itr++) { 
+					for ( ; itr != m_gateSorted.end(); itr++) {
         				vector <Gate*>::const_iterator itr_vector = itr->second.begin();
 						while(itr_vector != itr->second.end()){
 							Gate* tmp_gate = *itr_vector;
+
 							// cout << "Nom de la porte calculée : " << tmp_gate->getName() << endl;
 							/*> Evaluate only gate with delta non equal to zero */
 							if(tmp_gate->getDelta()){
+
 								tmp_gate->CalculateOutput();
+
 							}
 							// cout << "Sortie de " << tmp_gate->getName() << " = " << tmp_gate->getLogicState() << endl;
 							itr_vector++;
-						} 
+						}
     				}
     				itr_clock++;
 
@@ -251,7 +288,7 @@ bool Circuit::simulate(map<int, vector<bool> > * mapStimulis) const{
 				}else{
 					//clockCycle++;
 					//keep last output value
-				
+
 				}
 				//clockCycle++;
 
@@ -273,7 +310,7 @@ bool Circuit::simulate(map<int, vector<bool> > * mapStimulis) const{
 							itr++;
 						}
 
-						for ( ; itr != m_gateSorted.end(); itr++) { 
+						for ( ; itr != m_gateSorted.end(); itr++) {
         					vector <Gate*>::const_iterator itr_vector = itr->second.begin();
 							while(itr_vector != itr->second.end()){
 								Gate* tmp_gate = *itr_vector;
@@ -286,9 +323,9 @@ bool Circuit::simulate(map<int, vector<bool> > * mapStimulis) const{
 
 								itr_vector++;
 
-							} 
+							}
     					}
-    			
+
     				//clockCycle++;
     				itr_clock++;
 					}else{
