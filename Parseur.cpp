@@ -89,24 +89,24 @@ void Parseur::CreateConnections()
       { //declaration des connexinos
         // cout << "\t \t iin >= 0 " << endl;
         string in = line.substr(0,iin);
-        // int ilabel = line.find("[label=");
-        // cout << "\t \t ilabel = " << ilabel << endl;
-        // bool  sel = 0;
-        // if(ilabel >= 0)
-        // {
-        //   cout << "slty " << endl;
-        //   string sSEL = line.substr(ilabel+8,line.size()-ilabel-8-3);
-        //   // cout << "SEL = "<<sSEL << endl;
-        //   if(sSEL == "SEL")    sel=1;
-        //   out = line.substr(iin+2,line.size()-ilabel-iin-3);
-        //   cout << "out = " << out <<endl;
-        // }
-        // else
-        // {
+        int ilabel = line.find("[label=");
+        cout << "\t \t ilabel = " << ilabel << endl;
+        bool  sel = 0;
+        if(ilabel >= 0)
+        {
+          cout << "slty " << endl;
+          string sSEL = line.substr(ilabel+8,line.size()-ilabel-8-3);
+          // cout << "SEL = "<<sSEL << endl;
+          if(sSEL == "SEL")    sel=1;
+          out = line.substr(iin+2,line.size()-ilabel-iin-3);
+          cout << "out = " << out <<endl;
+        }
+        else
+        {
           out = line.substr(iin+2,line.size()-iin-3);
           cout << "out = " << out <<endl;;
 
-        // }
+        }
           if(in != "" && out !="")
           {
             // cout << "out = " << out <<endl;
@@ -131,17 +131,19 @@ void Parseur::CreateConnections()
 
               if(gIn!=NULL && gOut !=NULL)
               {
-                // if(sel)
-                // {
-                //   cout << "YOYOYOOYOYOYOY" << endl;
-                //   cout << gOut << endl;
-                //   // MUXx * mux = gOut;
-                //   Gate * MUX = new MUXx(gOut->getName(),gOut->getNbInput());
-                //   MUX->connectSel(gIn);
-                //   //Gate * tmp = MUX;
-                //   // MUX->MUXx::connectSel(gIn);
+                if(sel)
+                {
+                  //a faire : bien mettre a jour le vector de sel pour chaque MUX
+                  //
+                  // cout << "YOYOYOOYOYOYOY" << endl;
+                  // cout << gOut << endl;
+                  // // MUXx * mux = gOut;
+                  // Gate * MUX = new MUXx(gOut->getName(),gOut->getNbInput());
+                  // MUX->connectSel(gIn);
+                  //Gate * tmp = MUX;
+                  // MUX->MUXx::connectSel(gIn);
                 //   cout << "\t\t\t\t\t je push" << endl;
-                // }
+                 }
                 gIn->connectGate(gOut);
               }
               else
@@ -193,12 +195,12 @@ void Parseur::CreateGates()
         // cout << "ibracket = " << ibracket << endl;
         string name=line.substr(0,ibracket);
         int ilabel=line.find("label=\"");
-        // int iarrow = line.find("->");
-        // if(iarrow > 0 && iarrow < ilabel)
-        // {
-        //   cout << "slty surement un sel" << endl;
-        //   continue; //surement un sel
-        // }
+        int iarrow = line.find("->");
+        if(iarrow > 0 && iarrow < ilabel)
+        {
+          cout << "slty surement un sel" << endl;
+          continue; //surement un sel
+        }
         int ill=line.find("\"]");
         string label="";
         if(ilabel >=0 && ill >=0) label=line.substr(ilabel+7,ill-ilabel-7);
@@ -259,13 +261,13 @@ void Parseur::CreateGates()
               noms.insert(name);
 
             }
-            // else if (typegate == "MUX")
-            // {
-            //   Gate* MUX = new MUXx(name, nbinput, 0);
-            //   m_circuit->addGate(MUX);
-            //   noms.insert(name);
-            //
-            // }
+            else if (typegate == "MUX")
+            {
+              Gate* MUX = new MUXx(name, nbinput, 0);
+              m_circuit->addGate(MUX);
+              noms.insert(name);
+
+            }
             else
             {
               cout << "!!!    ERROR : type of gate | line = " << nbline << endl;
