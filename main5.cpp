@@ -43,25 +43,26 @@ int main(int argc, char const *argv[]){
 
 	/*>Is the circuit properly wired ?*/
 	if(circuit->checkGlobalConnection()){
-		//Sorting of circuit by level
-		if(circuit->sortGate()){
-			if(circuit->simulate(&mapStimuli)){
-				cout << "End of simulation" << endl;
+		//fill outpust vector in circuit to get logicstate
+		if(circuit->fillOutputsVector()){
+					//Sorting of circuit by level
+			if(circuit->sortGate()){
+				if(circuit->simulate(&mapStimuli)){
+					cout << "Simulation finished with success" << endl;
+				}else{
+					cout << "Simulation failed..." << endl;
+					exit(4);
+				}
 			}else{
-				cout << "Simulation failed..." << endl;
+				cout << "Combinatory loop error..." << endl;
 				exit(3);
 			}
 		}else{
-			cout << "Combinatory loop error..." << endl;
-			exit(2);
+			cout << "Circuit must have at least one output..." << endl;
+			exit(1);
 		}
 	}else{
 		cout << "Connection error...." << endl;
-		exit(1);
-	}
-
-
-
-
-	
+		exit(2);
+	}	
 }

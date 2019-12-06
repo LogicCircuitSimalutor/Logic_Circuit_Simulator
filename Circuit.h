@@ -15,6 +15,7 @@ class Circuit {
 	int m_level;
 	vector <Gate * > m_gates;
 	vector <Gate * > m_inputs;
+	vector <Gate * > m_outputs;
 	map <int, vector <Gate*>> m_gateSorted;
 
 public:
@@ -55,6 +56,10 @@ public:
 		return &m_inputs;
 	}
 
+	const vector <Gate *>* getOutputsVector() const{
+		return &m_outputs;
+	}
+
 	const map<int, vector<Gate*>>* getGateSorted() const{
 		return &m_gateSorted;
 	}
@@ -66,6 +71,8 @@ public:
 	bool addGate(Gate* g);
 
 	bool addInput(Gate* i);
+
+	bool addOutput(Gate* o);
 
 	bool deleteGate(const string & name);
 
@@ -80,6 +87,10 @@ public:
 	void applyInputs(vector<bool>& InputValues) const; //todo --> done
 
 	int findStartLevel() const;
+
+	bool fillOutputsVector();
+
+	bool printOutput() const;
 
 	friend ostream& operator<<(ostream& out, Circuit &c){
 		c.print(out);

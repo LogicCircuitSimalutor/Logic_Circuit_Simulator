@@ -2,6 +2,7 @@ digraph circuit
 
 {
 
+
 in1[label="INPUT"];
 in2[label="INPUT"];
 in3[label="INPUT"];

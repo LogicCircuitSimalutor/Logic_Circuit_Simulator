@@ -30,7 +30,6 @@ NANDx::~NANDx(){
 void NANDx::CalculateOutput(){
 	const vector <Gate *>* input = getInput();
 	vector <Gate *>::const_iterator itr = input->begin();
-	Gate * tmp = *itr;
 	bool temp_output;
 
 	while(itr != input->end()){
@@ -47,7 +46,7 @@ void NANDx::CalculateOutput(){
 	if(!temp_output != this->getLogicState()){
 		// cout << "temp_output = " << !temp_output << endl;
  		this->setLogicState(!temp_output);
- 		tmp->changeDeltaOnOutput();
+ 		this->changeDeltaOnOutput();
 	}
 
 	setDelta(0);

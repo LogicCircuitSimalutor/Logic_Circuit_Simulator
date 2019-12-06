@@ -30,7 +30,6 @@ NORx::~NORx(){
 void NORx::CalculateOutput(){
 	const vector <Gate *>* input = getInput();
 	vector <Gate *>::const_iterator itr = input->begin();
-	Gate * tmp = *itr;
 	bool temp_output;
 
 	while(itr != input->end()){
@@ -46,7 +45,7 @@ void NORx::CalculateOutput(){
 
 	if(!temp_output != this->getLogicState()){
  		this->setLogicState(!temp_output);
- 		tmp->changeDeltaOnOutput();
+ 		this->changeDeltaOnOutput();
 	}
 
 	setDelta(0);

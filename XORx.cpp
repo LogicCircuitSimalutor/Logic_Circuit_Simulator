@@ -21,7 +21,7 @@ void XORx::CalculateOutput(){
 	}
 	if(temp_output != this->getLogicState()){
 		this->setLogicState(temp_output);
-		tmp->changeDeltaOnOutput();
+		this->changeDeltaOnOutput();
 	}
 	setDelta(0);
 }

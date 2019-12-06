@@ -20,7 +20,7 @@ bool Circuit::calculateDelta() const{
 	while(itr != m_gates.end()){
 		Gate * tmp = *itr;
 		if(tmp->getDelta()){
-			cout << "Delta vaut : " << tmp->getDelta() << endl;
+			//cout << "Delta vaut : " << tmp->getDelta() << endl;
 			return true;
 		}
 		itr++;
@@ -35,6 +35,11 @@ bool Circuit::addGate(Gate* g){
 
 bool Circuit::addInput(Gate* i){
 	m_inputs.push_back(i);
+	return true;
+}
+
+bool Circuit::addOutput(Gate* o){
+	m_outputs.push_back(o);
 	return true;
 }
 
@@ -57,7 +62,6 @@ void Circuit::applyInputs(vector<bool>& InputValues) const{
 		}
 		itr++;
 	}
-
 }
 
 int Circuit::findStartLevel() const{
@@ -75,8 +79,38 @@ int Circuit::findStartLevel() const{
 		} 
     }
     return 0; //erreur lors de la recherche de niveau
+}
 
+bool Circuit::fillOutputsVector(){
+	vector <Gate *>::const_iterator itr = m_gates.begin();
+	while(itr != m_gates.end()){
+		Gate * tmp = *itr;
+		if(!(tmp->getSizeOutput())){
+			this->addOutput(tmp);
+		}	
+		itr++;
+	}
 
+	if(!(m_outputs.size())){
+		return false; //not possible to have a circuit without output
+	}else{
+		return true;
+	}
+
+}
+
+bool Circuit::printOutput() const{
+	if(!(m_outputs.size())){
+		return false; //not possible to have a circuit without output
+	}else{
+		vector <Gate *>::const_iterator itr = m_outputs.begin();
+		while(itr != m_outputs.end()){
+			Gate * tmp = *itr;
+			cout << tmp->getName() << " : " << tmp->getLogicState() << endl;
+			itr++;
+		}
+	}
+	return true;
 }
 
 bool Circuit::sortGate(){
@@ -146,7 +180,7 @@ bool Circuit::sortGate(){
 }
 
 bool Circuit::simulate(map<int, vector<bool> > * mapStimulis) const{
-	//We start simulation at startLevel, that means we skip level we stay unchanged
+	//We start simulation at startLevel, that means we skip level which stay unchanged
 	int startLevel = 1;
 	//Clock Time cycle
 	int clockCycle = 0;
@@ -154,26 +188,36 @@ bool Circuit::simulate(map<int, vector<bool> > * mapStimulis) const{
 	map<int, vector<bool> >* Stimulis = mapStimulis;
 	map<int, vector<bool> >::iterator itr_clock = Stimulis->begin();
 
-	//Loop on map stimuli
+	/* ================= READ MAP STIMULI ===================== */
 	while(itr_clock != Stimulis->end()){
-		cout << "VCDTime : " << itr_clock->first << endl;
-		cout << "ClockCycle : " << clockCycle << endl;
+		//cout << "VCDTime : " << itr_clock->first << endl;
+		//cout << "ClockCycle : " << clockCycle << endl;
+
+		/*> ================ START OF SIMULATION FOR ONE CYCLE ======================= */
+
+		/*> CHECK IF STIMULI AT CLOCK CYCLE */
 		if(itr_clock->first != clockCycle){
-			cout << "ICI" << endl;
+			/*>Wait for next clock cycle */
 			clockCycle++;
-			itr_clock++;
 		}else{
+
+			/*> FOR FIRST CLOCK CYCLE, CIRCUIT IS FULL EVALUATED */
 			if(clockCycle == 0){
-				cout << "Clock 0" << endl;
+				//cout << "Clock 0" << endl;
+
 				/*>Application des stimuli */
 				applyInputs(itr_clock->second);
+
+				/*> EVEN IF ALL DELTA OF EACH GATE IS DEFAULT VALUE 1, WE CHECK IF GLOBAL DELTA IS TRUE */
 				if(calculateDelta()){
 				/*>Recherche de la première entrée modifiée */
-
 				/*>Calcul de startLevel*/
 				startLevel = findStartLevel();
-				cout << "startLevel vaut " << startLevel << endl;
-				if(startLevel){ //on retourne un niveau correct
+
+				/*>START FROM LEVEL WHERE DELTA DIFFERENT OF 0*/
+				if(startLevel){ //if we find a level different of 0
+
+					/*> ================= EVALUATION OF CIRCUIT ================================ */
 
 					map <int, vector <Gate*>>::const_iterator itr = m_gateSorted.begin();
 					for(int i = 0 ; i < startLevel ; i++){
@@ -185,35 +229,35 @@ bool Circuit::simulate(map<int, vector<bool> > * mapStimulis) const{
 						while(itr_vector != itr->second.end()){
 							Gate* tmp_gate = *itr_vector;
 							// cout << "Nom de la porte calculée : " << tmp_gate->getName() << endl;
-							tmp_gate->CalculateOutput();
+							/*> Evaluate only gate with delta non equal to zero */
+							if(tmp_gate->getDelta()){
+								tmp_gate->CalculateOutput();
+							}
 							// cout << "Sortie de " << tmp_gate->getName() << " = " << tmp_gate->getLogicState() << endl;
 							itr_vector++;
 						} 
     				}
-    				itr = m_gateSorted.end();
-    				itr--;
-    				vector <Gate*>::const_iterator itr_vector = itr->second.begin();
-    				Gate* tmp_gate = *itr_vector;
-    				cout << "La PUTAIN DE SORTIE POUR LA CLOCK " << clockCycle << " VAUT : " << tmp_gate->getLogicState() << endl;
-    				clockCycle++;
     				itr_clock++;
-    				// itr = m_gateSorted.end();
-    				// vector <Gate*>::const_iterator itr_vector = itr->second.begin();
-    				// Gate* tmp_gate = *itr_vector;
-    				// cout << "La sortie vaut : " << tmp_gate->getLogicState() << endl;
+
+    				/*> ================== END OF EVALUATION ================================= */
+
+    				/*> ERROR WITH SEARCH LEVEL */
 					}else{
-						cout << "Je suis là " << endl;
-						return false; //il y a une erreur dans la recherche de niveau
+						cout << "Search start level failed .... " << endl;
+						return false; //error during searching of level to start
 					}
 
+				/*> DELTA IS NULL, NO GATE NEED TO BE EVALUATED, WAIT FOR NEXT STIMULI, INCREMENT CLOCK CYCLE */
 				}else{
-					cout << "En fait je suis là " << endl;
-					//next stimuli
-					//on garde la dernière valeur de sortie
+					//clockCycle++;
+					//keep last output value
 				
 				}
+				//clockCycle++;
+
+				/*> FOR NEXT CLOCK CYCLE DIFFERENT OF 0, EVALUATE ONLY MANDATORY STAGE */
 			}else{
-				cout << "Clock différente de 0" << endl;
+				//cout << "Clock différente de 0" << endl;
 				/*>Application des stimuli */
 				applyInputs(itr_clock->second);
 				/*> Calcul de Delta if delta = 0 ==> next stimuli else calculation */
@@ -234,39 +278,40 @@ bool Circuit::simulate(map<int, vector<bool> > * mapStimulis) const{
 							while(itr_vector != itr->second.end()){
 								Gate* tmp_gate = *itr_vector;
 								// cout << "Nom de la porte calculée : " << tmp_gate->getName() << endl;
-								tmp_gate->CalculateOutput();
+								/*> Evaluate only gate with delta non equal to zero */
+								if(tmp_gate->getDelta()){
+									tmp_gate->CalculateOutput();
+								}
 								// cout << "Sortie de " << tmp_gate->getName() << " = " << tmp_gate->getLogicState() << endl;
 
 								itr_vector++;
 
 							} 
     					}
-    				itr = m_gateSorted.end();
-    				itr--;
-    				vector <Gate*>::const_iterator itr_vector = itr->second.begin();
-    				Gate* tmp_gate = *itr_vector;
-    				cout << "La PUTAIN DE SORTIE POUR LA CLOCK " << clockCycle << " VAUT : " << tmp_gate->getLogicState() << endl;
     			
-    					clockCycle++;
-    				// itr = m_gateSorted.end();
-    				// vector <Gate*>::const_iterator itr_vector = itr->second.begin();
-    				// Gate* tmp_gate = *itr_vector;
-    				// cout << "La sortie vaut : " << tmp_gate->getLogicState() << endl;
+    				//clockCycle++;
+    				itr_clock++;
 					}else{
-						cout << "Je suis là " << endl;
-						return false; //il y a une erreur dans la recherche de niveau
+						cout << "Search start level failed .... " << endl;
+						return false; //error during searching of level to start
 					}
 
 				}else{
-					cout << "En fait je suis là " << endl;
+					//clockCycle++;
 					//next stimuli
 					//on garde la dernière valeur de sortie
 				}
-				itr_clock++;
 
 			}
+			/*> ================ END OF SIMULATION FOR ONE CYCLE ======================= */
+    		/*> next clock cycle */
+    		clockCycle++;
 		}
+		/*> print output of circuit */
+		cout << "CLK" << clockCycle - 1<< endl;
+		printOutput();
 	}
+	/*===================== END OF READING STIMULI ========================= */
 
-	return true; //la simulation a fonctionné
+	return true; //simulation finished without errors
 }

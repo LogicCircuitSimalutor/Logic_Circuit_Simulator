@@ -29,7 +29,6 @@ ANDx::~ANDx(){
 void ANDx::CalculateOutput(){
 	const vector <Gate *>* input = getInput();
 	vector <Gate *>::const_iterator itr = input->begin();
-	Gate * tmp = *itr;
 	bool temp_output;
 
 	while(itr != input->end()){
@@ -45,7 +44,7 @@ void ANDx::CalculateOutput(){
 
 	if(temp_output != this->getLogicState()){
  		this->setLogicState(temp_output);
- 		tmp->changeDeltaOnOutput();
+ 		this->changeDeltaOnOutput();
 	}
 
 	setDelta(0);

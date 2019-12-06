@@ -88,6 +88,10 @@ public:
 		return m_input.size();
 	}
 
+	int getSizeOutput() const{
+		return m_output.size();
+	}
+
 	int getNbInput() const{
 		return m_NbINput;
 	}
