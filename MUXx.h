@@ -14,8 +14,8 @@ public:
 
 	MUXx(string name, int NbInput, bool logicState = 0) :
 	Gate(name, NbInput, logicState),
-	FunctionGate(name, NbInput, logicState){
-
+	FunctionGate(name, NbInput, logicState)
+	{
 	}
 
 	~MUXx();
@@ -26,9 +26,12 @@ public:
 	// void connectGate(Gate* g);
 
 	void print(ostream& out) const;
-	vector<Gate *> getVectorSel()
+	vector<Gate *> *getVectorSel()
 	{
-		return m_vectorSel;
+		return &m_vectorSel;
+	}
+	int getSizeSel(){
+		return m_vectorSel.size();
 	}
 
 

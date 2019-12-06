@@ -12,7 +12,7 @@ ostream& operator<<(ostream& out, const Gate& g){
 Gate::~Gate(){
 	delete &m_input;
 	delete &m_output;
-} 
+}
 
 void Gate::print(ostream& out) const {
 	out << "INPUT VECTOR" << endl;

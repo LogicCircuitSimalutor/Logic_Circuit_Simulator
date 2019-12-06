@@ -1,5 +1,5 @@
 #include "Parseur.h"
-
+#include <algorithm>    // std::replace
 using namespace std;
 
 
@@ -89,22 +89,22 @@ void Parseur::CreateConnections()
       { //declaration des connexinos
         // cout << "\t \t iin >= 0 " << endl;
         string in = line.substr(0,iin);
-        int ilabel = line.find("[label=");
-        cout << "\t \t ilabel = " << ilabel << endl;
+        int ilabel = line.find("[label=\"SEL\"];");
+        string ss = "[label=\"SEL\"];";
+        // cout << ss.size()  << endl<< endl;
+        // cout << "\t \t ilabel = " << ilabel << endl;
         bool  sel = 0;
         if(ilabel >= 0)
         {
-          cout << "slty " << endl;
-          string sSEL = line.substr(ilabel+8,line.size()-ilabel-8-3);
-          // cout << "SEL = "<<sSEL << endl;
-          if(sSEL == "SEL")    sel=1;
-          out = line.substr(iin+2,line.size()-ilabel-iin-3);
-          cout << "out = " << out <<endl;
+          cout << "sltyyyyy on a un SEL " << endl;
+          sel=1;
+          out = line.substr(iin+2,line.size()-iin-2-14);
+          cout << "sel out = " << out <<endl;
         }
         else
         {
           out = line.substr(iin+2,line.size()-iin-3);
-          cout << "out = " << out <<endl;;
+          // cout << "out = " << out <<endl;;
 
         }
           if(in != "" && out !="")
@@ -116,6 +116,7 @@ void Parseur::CreateConnections()
               cout << "input = " << line << "\t" << in << " se connecte à " << out << endl;
               Gate * gIn= NULL;
               Gate * gOut=NULL;
+              MUXx * mOut =NULL;
               for(std::vector<Gate*>::const_iterator it =m_circuit->getGatesVector()->begin(); it!=m_circuit->getGatesVector()->end(); ++it)
               {
                 Gate * tmp = *it;
@@ -128,32 +129,42 @@ void Parseur::CreateConnections()
                 if(tmp->getName() == in) gIn=tmp;
                 if(tmp->getName() == out) gOut=tmp;
               }
-
-              if(gIn!=NULL && gOut !=NULL)
+              if(sel)
               {
-                if(sel)
+                for(std::vector<MUXx*>::const_iterator it =m_circuit->getMuxVector()->begin(); it!=m_circuit->getMuxVector()->end(); ++it)
                 {
-                  //a faire : bien mettre a jour le vector de sel pour chaque MUX
-                  //
-                  // cout << "YOYOYOOYOYOYOY" << endl;
-                  // cout << gOut << endl;
-                  // // MUXx * mux = gOut;
-                  // Gate * MUX = new MUXx(gOut->getName(),gOut->getNbInput());
-                  // MUX->connectSel(gIn);
-                  //Gate * tmp = MUX;
-                  // MUX->MUXx::connectSel(gIn);
+                  MUXx * tmp = *it;
+                  if(tmp->getName() == out) mOut=tmp;
+                }
+              }
+              if(gIn!=NULL && (gOut !=NULL || mOut!=NULL))
+              {
+                if(sel && mOut != NULL)
+                {
+                  cout << "\t \t \t J'ai vu un MUX " << endl;
+                  // MUXx(gOut)->connectSel(gIn);
+
+                  mOut->connectSel(gIn);
+                  // gIn->addOutput(gOut);
+                  cout << gOut << endl;
                 //   cout << "\t\t\t\t\t je push" << endl;
                  }
-                gIn->connectGate(gOut);
+                 else
+                 {
+                   cout << "je rentre dans le connectgate " << endl;
+                   gIn->connectGate(gOut);
+                 }
               }
-              else
-              {
-                cout << "!!!    ERROR : Input or output didnt known \t in :" << in << " out : " << out << " | line = " << nbline << endl;
-              }
+                else
+                {
+                  cout << "!!!    ERROR : Input or output didnt known \t in :" << in << " out : " << out << " | line = " << nbline << endl;
+                  exit(1);
+                }
             }
             else
             {
               cout << "!!!    ERROR : Input or output didnt known \t in :" << in << " out : " << out << " | line = " << nbline << endl;
+              exit(1);
             }
           }
           else
@@ -162,10 +173,12 @@ void Parseur::CreateConnections()
             exit(1);
           }
 
-      }//if iin>=0
+      }//if iin>=0un
     }//while getline
   }//if CircuitCreated
 }
+
+
 void Parseur::CreateGates()
 {
   ifstream myfile(getPath());
@@ -263,10 +276,11 @@ void Parseur::CreateGates()
             }
             else if (typegate == "MUX")
             {
-              Gate* MUX = new MUXx(name, nbinput, 0);
-              m_circuit->addGate(MUX);
+              MUXx* MUX = new MUXx(name, nbinput, 0);
+              m_circuit->addMux(MUX);
+              Gate * MUXX = MUX;
+              m_circuit->addGate(MUXX);
               noms.insert(name);
-
             }
             else
             {
@@ -286,7 +300,7 @@ void Parseur::CreateGates()
         {
           if(label=="INPUT")
           {
-            //cout << " Déclaration de l'entree avec le nom unique " << name << ", un label "<< label <<endl;
+            cout << " Déclaration de l'entree avec le nom unique " << name << ", un label "<< label <<endl;
             Gate* IN1 = new InputGate(name);
             m_circuit->addInput(IN1);
             noms.insert(name);
@@ -304,7 +318,7 @@ void Parseur::CreateGates()
          // }
           else if(label == "NOT")
           {
-            //cout << " Déclaration de la gate avec le nom unique " << name << " du type NOT, un label "<< label <<endl;
+            cout << " Déclaration de la gate avec le nom unique " << name << " du type NOT, un label "<< label <<endl;
             Gate* NOT = new NOTx(name);
             noms.insert(name);
             m_circuit->addGate(NOT);

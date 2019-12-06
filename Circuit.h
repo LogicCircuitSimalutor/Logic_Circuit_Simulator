@@ -7,6 +7,8 @@
 #include <map>
 #include "Gate.h"
 #include "build/VCDTypes.hpp"
+#include "MUXx.h"
+
 
 using namespace std;
 
@@ -16,6 +18,7 @@ class Circuit {
 	vector <Gate * > m_gates;
 	vector <Gate * > m_inputs;
 	vector <Gate * > m_outputs;
+	vector <MUXx * > m_mux;
 	map <int, vector <Gate*>> m_gateSorted;
 
 public:
@@ -47,7 +50,9 @@ public:
 	int getNbGates() const{
 		return m_gates.size();
 	}
-
+const vector<MUXx * > * getMuxVector() const{
+	return &m_mux;
+}
 	const vector <Gate * >* getGatesVector() const{
 		return &m_gates;
 	}
@@ -71,6 +76,9 @@ public:
 	bool addGate(Gate* g);
 
 	bool addInput(Gate* i);
+	// bool replace(Gate * g);
+	bool addMux(MUXx* g);
+
 
 	bool addOutput(Gate* o);
 
