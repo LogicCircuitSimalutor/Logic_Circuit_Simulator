@@ -13,7 +13,10 @@
 #include <vector>
 #include "main5.h"
 
-
+#define NBL 750
+#define NBC 1000
+#define X 10
+#define Y 20
 using namespace std;
 
 int main(int argc, char const *argv[]){
@@ -26,6 +29,7 @@ int main(int argc, char const *argv[]){
 	map<int, vector<bool> >mapStimuli;
 
 	Circuit * circuit = NULL; //init of circuit
+	Chronogramme chrono(NBL, NBC, 255);
 
 	/*>Parse DOT file in order to create circuit*/
 	Parseur parseur(dot_path);
@@ -36,19 +40,24 @@ int main(int argc, char const *argv[]){
 	parseurVCD.connectCircuit(parseur.getCircuit());
 	parseurVCD.Parser(mapStimuli);
 
-	cout << parseur << endl;
-	cout << parseurVCD << endl;
+	chrono.TraceClock(int(mapStimuli.size()), X+40, Y);
+
+	//cout << parseur << endl;
+	//cout << parseurVCD << endl;
 
 	circuit = parseur.getCircuit();
 
 	/*>Is the circuit properly wired ?*/
 	if(circuit->checkGlobalConnection()){
 		//fill outpust vector in circuit to get logicstate
-		if(circuit->fillOutputsVector()){
+		if(circuit->fillOutputsVector(chrono.getSignalVector(), X, Y)){
+			chrono.TraceNewSignalLine(X+40, Y);
 					//Sorting of circuit by level
 			if(circuit->sortGate()){
-				if(circuit->simulate(&mapStimuli)){
+				if(circuit->simulate(&mapStimuli, chrono, period)){
 					cout << "Simulation finished with success" << endl;
+					chrono.sauver("chronogramme.bmp");
+					system("chronogramme.bmp");
 				}else{
 					cout << "Simulation failed..." << endl;
 					exit(4);
