@@ -9,7 +9,6 @@
 #include "build/VCDTypes.hpp"
 #include "MUXx.h"
 
-=======
 #include "Signal.h"
 #include "Chronogramme.h"
 

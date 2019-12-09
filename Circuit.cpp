@@ -5,6 +5,14 @@
 
 bool Circuit::checkGlobalConnection(){
 	vector <Gate *>::const_iterator itr = m_gates.begin();
+	vector <MUXx * >::const_iterator itr_mux = m_mux.begin();
+	while(itr_mux != m_mux.end()){
+		MUXx * tmp = *itr_mux;
+		if(!(tmp->checkNumberSelector())){
+			return false;
+		}
+		itr_mux++;
+	}
 	while(itr != m_gates.end()){
 		Gate * tmp = *itr;
 		if(!(tmp->CheckNumberInputs())){
@@ -127,9 +135,10 @@ bool Circuit::fillOutputsVector(vector<Signal*>* s, int x, int y){
 		Gate * tmp = *itr;
 		if(!(tmp->getSizeOutput())){
 			this->addOutput(tmp);
-		}
+		
 			x = x + 40;
 			s->push_back(new Signal(x,y,tmp));
+		}
 		itr++;
 	}
 
