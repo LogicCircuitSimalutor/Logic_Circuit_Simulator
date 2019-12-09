@@ -115,14 +115,21 @@ int Circuit::findStartLevel() const{
 }
 
 bool Circuit::fillOutputsVector(vector<Signal*>* s, int x, int y){
-	vector <Gate *>::const_iterator itr = m_gates.begin();
+	vector <Gate *>::const_iterator itr = m_inputs.begin();
+	while(itr != m_inputs.end()){
+		Gate * tmp = *itr;
+		x = x + 40;
+		s->push_back(new Signal(x,y,tmp));
+		itr++;
+	}
+	itr = m_gates.begin();
 	while(itr != m_gates.end()){
 		Gate * tmp = *itr;
 		if(!(tmp->getSizeOutput())){
 			this->addOutput(tmp);
 		}
-			x = x + s->size()*40;
-			s->push_back(new Signal(x+80,y,tmp));	
+			x = x + 40;
+			s->push_back(new Signal(x,y,tmp));
 		itr++;
 	}
 
@@ -134,16 +141,23 @@ bool Circuit::fillOutputsVector(vector<Signal*>* s, int x, int y){
 
 }
 
-bool Circuit::printOutput() const{
+bool Circuit::printOutput(ostream& out) const{
 	if(!(m_outputs.size())){
 		return false; //not possible to have a circuit without output
 	}else{
-		vector <Gate *>::const_iterator itr = m_outputs.begin();
-		while(itr != m_outputs.end()){
+		vector <Gate *>::const_iterator itr = m_inputs.begin();
+		while(itr != m_inputs.end()){
 			Gate * tmp = *itr;
-			cout << tmp->getName() << " : " << tmp->getLogicState() << endl;
+			out << tmp->getName() << " : " << tmp->getLogicState() << endl;
 			itr++;
 		}
+		itr = m_outputs.begin();
+		while(itr != m_outputs.end()){
+			Gate * tmp = *itr;
+			out << tmp->getName() << " : " << tmp->getLogicState() << endl;
+			itr++;
+		}
+		out << endl;
 	}
 	return true;
 }
@@ -214,7 +228,7 @@ bool Circuit::sortGate(){
 	return true;
 }
 
-bool Circuit::simulate(map<int, vector<bool> > * mapStimulis, Chronogramme& c, int period) const{
+bool Circuit::simulate(map<int, vector<bool> > * mapStimulis, Chronogramme& c, int period,ostream& out) const{
 	//We start simulation at startLevel, that means we skip level which stay unchanged
 	int startLevel = 1;
 	//Clock Time cycle
@@ -347,8 +361,9 @@ bool Circuit::simulate(map<int, vector<bool> > * mapStimulis, Chronogramme& c, i
     		clockCycle++;
 		}
 		/*> print output of circuit */
-		cout << "CLK" << clockCycle - 1<< endl;
-		printOutput();
+		//cout << "CLK" << clockCycle - 1<< endl;
+		out << "Time : " << clockCycle-1 << endl;
+		printOutput(out);
 		c.TraceChronogramme(clockCycle-1);
 	}
 	/*===================== END OF READING STIMULI ========================= */

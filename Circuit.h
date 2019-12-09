@@ -94,7 +94,7 @@ public:
 
 	bool sortGate(); //todo --> done
 
-	bool simulate(map<int, vector<bool> > * mapStimulis, Chronogramme& c, int period) const; //in progress
+	bool simulate(map<int, vector<bool> > * mapStimulis, Chronogramme& c, int period, ostream& out) const; //in progress
 
 	void applyInputs(vector<bool>& InputValues) const; //todo --> done
 
@@ -102,7 +102,7 @@ public:
 
 	bool fillOutputsVector(vector<Signal*>* s, int x, int y);
 
-	bool printOutput() const;
+	bool printOutput(ostream& out) const;
 
 	friend ostream& operator<<(ostream& out, Circuit &c){
 		c.print(out);

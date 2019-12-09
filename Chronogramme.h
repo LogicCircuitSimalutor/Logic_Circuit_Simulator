@@ -176,7 +176,7 @@ public:
     // Si les image im1 ou im2 n'ont pas la même taille, l'image retournée est invalide.
     friend Chronogramme operator+(const Chronogramme & im1, const Chronogramme & im2);
 
-    friend ostream& operator<<(ostream& out, const Chronogramme&im);
+    friend ostream& operator<<(ostream& out, const Chronogramme& a);
 };
 
 #endif

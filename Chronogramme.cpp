@@ -174,21 +174,13 @@ Chronogramme operator+(const Chronogramme& a, const Chronogramme& b) {
 
 
 ostream& operator<<(ostream& out, const Chronogramme& a) {
-    out << "******** Image ********"<<endl;
-    out << "Adresse memoire " << &a <<endl;
-    out << "nb lignes   = " << a.nblignes <<endl;
-    out << "nb colonnes = " << a.nbcolonnes <<endl;
-    out << "data ptr    = " << (void *) a.data <<endl;
-    out << "Tableau des pixels : " <<endl;
-    if (a.data) {
-        for (int i=0; i<a.nblignes; i++) {
-            out<<"    ";
-            for (int j=0; j<a.nbcolonnes; j++)
-                out << (int) a.getPixel(i, j)<<" ";
-            out<<endl;
-        }
+    out << "Order of signals for chronogramme : " << endl;
+    vector <Signal * >::const_iterator itr = a.m_signal.begin();
+    while(itr != a.m_signal.end()){
+        Signal * tmp = *itr;
+        out << tmp->getAddrGate()->getName() << "\n" << endl;
+        itr++;
     }
-    out << "************************"<<endl;
     return out;
 }
 
@@ -287,9 +279,9 @@ void Chronogramme::TraceChronogramme(int clk){
             Gate* tmp_gate = tmp_signal->getAddrGate();
             //We call the trace function in function of logic state of tmp_gate
             if(tmp_gate->getLogicState()){
-                Trace::DrawZeroToOne(this, tmp_signal->getX(), tmp_signal->getY()+factor*10);
+                Trace::DrawZeroToOne(this, tmp_signal->getX(), tmp_signal->getY()+1);
             }else{
-                Trace::DrawOneToZero(this, tmp_signal->getX(), tmp_signal->getY()+factor*10);
+                Trace::DrawZero(this, tmp_signal->getX()+20, tmp_signal->getY()+1);
             }
             tmp_signal->setY(tmp_signal->getY()+factor*20);
             tmp_signal->setPrevLogicState(tmp_gate->getLogicState());
@@ -303,15 +295,15 @@ void Chronogramme::TraceChronogramme(int clk){
             
             if(tmp_gate->getLogicState()){
                 if(tmp_signal->getPrevLogicState()){
-                    Trace::DrawOne(this, tmp_signal->getX(), tmp_signal->getY()+factor*10);
+                    Trace::DrawOne(this, tmp_signal->getX(), tmp_signal->getY()+1);
                 }else{
-                    Trace::DrawZeroToOne(this, tmp_signal->getX(), tmp_signal->getY()+factor*10);
+                    Trace::DrawZeroToOne(this, tmp_signal->getX(), tmp_signal->getY()+1);
                 }
             }else{
                 if(!(tmp_signal->getPrevLogicState())){
-                   Trace::DrawZero(this, tmp_signal->getX()+20, tmp_signal->getY()+factor*10);
+                   Trace::DrawZero(this, tmp_signal->getX()+20, tmp_signal->getY()+1);
                 }else{
-                   Trace::DrawOneToZero(this, tmp_signal->getX(), tmp_signal->getY()+factor*10);
+                   Trace::DrawOneToZero(this, tmp_signal->getX(), tmp_signal->getY()+1);
                 }
             }
             tmp_signal->setPrevLogicState(tmp_gate->getLogicState());
