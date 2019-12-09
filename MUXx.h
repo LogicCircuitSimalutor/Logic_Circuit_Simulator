@@ -34,6 +34,8 @@ public:
 		return m_vectorSel.size();
 	}
 
+	bool checkNumberSelector();
+
 
 };
 

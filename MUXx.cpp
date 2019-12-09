@@ -9,68 +9,56 @@ MUXx::~MUXx(){
 
 }
 
-// void ORx::CalculateOutput(){
-// 	const vector <Gate * >* input = getInput();
-// 	vector <Gate *>::const_iterator itr = input->begin();
-// 	Gate * tmp = *itr;
-// 	itr++;
-// 	bool temp_output = tmp->getLogicState();
-
-// 	while(itr != input->end()){
-// 		Gate * tmp = *itr;
-// 		temp_output = temp_output || tmp->getLogicState();
-// 		itr++;
-// 	}
-// 	if(temp_output != this->getLogicState()){
-// 		this->setLogicState(temp_output);
-// 		tmp->changeDeltaOnOutput();
-// 	}
-// 	setDelta(0);
-// }
 void MUXx::connectSel(Gate* Sel)
 {
 	m_vectorSel.push_back(Sel);
 }
 
-void MUXx::CalculateOutput(){
-
-	if(getSizeInput() != pow(2,getSizeSel()))
-	{
-		cout << "ERROR :: Number of selectors dont match nbinput = " << getSizeInput() << " sizeSel = " << getSizeSel() << " pow =" << pow(2,getSizeSel())  << endl;
-	 exit(1);
+bool MUXx::checkNumberSelector(){
+	if(getSizeInput() <= pow(2, getSizeSel()) && getSizeInput() >= pow(2, getSizeSel()-1)){
+		return true;
+	}else{
+		cout << "ERROR : Number of selector doesn't macth with number of inputs" << endl;
+		return false;
 	}
-	cout << "Number of selectors  match nbinput = " << getSizeInput() << " sizeSel = " << getSizeSel() << " pow =" << pow(2,getSizeSel())  << endl;
+}
 
-	std::reverse(m_vectorSel.begin(),m_vectorSel.end());//reverse LSB and MSB
+void MUXx::CalculateOutput(){
 
 	int value_sel=0;
 	int itr =0;
+	bool temp_output =0;
+
 	for(std::vector<Gate*>::iterator itrv=m_vectorSel.begin();itrv!=m_vectorSel.end();itrv++)
 	{
 		Gate * tmp = *itrv;
-	// cout << "itrv = " << itrv << endl;
-	// cout << endl<<  double(m_vectorSel.size()-itrv) << "^" << double(m_vectorSel[itrv]) <<endl;
 		value_sel += (pow(2,itr) * tmp->getLogicState()) ;
 		itr++;
 	}
-	cout << "value sel = " << value_sel << endl;
-	bool temp_output =0;
+	//cout << "value sel = " << value_sel << endl;
 
+	// const vector <Gate *>* input = 
 
-	const vector <Gate *>* input = getInput();
+	if(value_sel >= getSizeInput()){
+		cout << "Input " << value_sel << " is not connected" << endl;
+		exit(101);
+	}else{
+		vector <Gate*>::const_iterator itr_gate = getInput()->begin() + value_sel;
+		Gate * tmp_gate = *itr_gate;
+		temp_output = tmp_gate->getLogicState();
 
-	int tmp =0;
-
-	for(vector <Gate *>::const_iterator itrv = input->begin();itrv!=input->end();itrv++)
-	{
-		Gate * gtmp = *itrv;
-		if(tmp == value_sel)
-		{
-			temp_output=gtmp->getLogicState();
-			itrv=input->end();
-		}
-		tmp++;
 	}
+
+	// while(itr_gate != input->end()){
+	// 	Gate * tmp_gate = *itr_gate;
+	// 	if(tmp == value_sel)
+	// 	{
+	// 		temp_output=tmp_gate->getLogicState();
+	// 		//itrv=input->end();
+	// 	}
+	// 	tmp++;
+	// 	itr_gate++;
+	// }
 
 	if(temp_output != this->getLogicState()){
  		this->setLogicState(temp_output);

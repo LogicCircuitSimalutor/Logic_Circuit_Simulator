@@ -11,7 +11,7 @@ in5[label="INPUT"];
 in6[label="INPUT"];
 in7[label="INPUT"];
 
-a[label="MUX2"];
+a[label="AND2"];
 b[label="OR2"];
 c[label="NOT"];
 d[label="NAND3"];
@@ -19,16 +19,23 @@ e[label="XOR4"];
 f[label="NOR2"];
 g[label="NOT"];
 h[label="XOR3"];
+i[label="MUX3"];
 
-in1->a[label="SEL"];
+in1->a;
 in2->a;
-in3->a;
 in3->b;
 in4->b;
 in4->d;
 in5->e;
 in6->f;
 in7->g;
+
+in1->i[label="SEL"];
+in2->i[label="SEL"];
+
+g->i;
+in7->i;
+in4->i;
 
 a->c;
 a->e;
