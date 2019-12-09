@@ -63,6 +63,8 @@ int main(int argc, char const *argv[]){
 					cout << "Simulation finished with success" << endl;
 					cout << chrono << endl;
 					chrono.sauver("chronogramme.bmp");
+					system("eog chronogramme.bmp&");
+					system("gedit result.txt&");
 				}else{
 					cout << "Simulation failed..." << endl;
 					exit(4);
