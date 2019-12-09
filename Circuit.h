@@ -9,6 +9,9 @@
 #include "build/VCDTypes.hpp"
 #include "MUXx.h"
 
+=======
+#include "Signal.h"
+#include "Chronogramme.h"
 
 using namespace std;
 
@@ -50,9 +53,11 @@ public:
 	int getNbGates() const{
 		return m_gates.size();
 	}
-const vector<MUXx * > * getMuxVector() const{
-	return &m_mux;
-}
+
+	const vector<MUXx * > * getMuxVector() const{
+		return &m_mux;
+	}
+
 	const vector <Gate * >* getGatesVector() const{
 		return &m_gates;
 	}
@@ -79,7 +84,6 @@ const vector<MUXx * > * getMuxVector() const{
 	// bool replace(Gate * g);
 	bool addMux(MUXx* g);
 
-
 	bool addOutput(Gate* o);
 
 	bool deleteGate(const string & name);
@@ -90,15 +94,15 @@ const vector<MUXx * > * getMuxVector() const{
 
 	bool sortGate(); //todo --> done
 
-	bool simulate(map<int, vector<bool> > * mapStimulis) const; //in progress
+	bool simulate(map<int, vector<bool> > * mapStimulis, Chronogramme& c, int period, ostream& out) const; //in progress
 
 	void applyInputs(vector<bool>& InputValues) const; //todo --> done
 
 	int findStartLevel() const;
 
-	bool fillOutputsVector();
+	bool fillOutputsVector(vector<Signal*>* s, int x, int y);
 
-	bool printOutput() const;
+	bool printOutput(ostream& out) const;
 
 	friend ostream& operator<<(ostream& out, Circuit &c){
 		c.print(out);

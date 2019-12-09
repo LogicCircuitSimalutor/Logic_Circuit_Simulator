@@ -1,9 +1,9 @@
 CC = g++
 CFLAGS = -Wall -std=c++11
-EXEC_NAME = parse
+EXEC_NAME = main5
 INCLUDES =
 LIBS =
-OBJ_FILES = Circuit.o  ANDx.o FunctionGate.o Gate.o InputGate.o NANDx.o NORx.o NOTx.o ORx.o XORx.o MUXx.o Parseur.o ParseurVCD.o main5.o
+OBJ_FILES = Circuit.o ANDx.o MUXx.o FunctionGate.o Gate.o InputGate.o NANDx.o NORx.o NOTx.o ORx.o XORx.o Parseur.o ParseurVCD.o Trace.o Chronogramme.o BmpIO.o main5.o Signal.o
 OBJ_VCD_FILES =  ./build/VCDFile.o ./build/VCDParser.o ./build/VCDValue.o ./build/VCDFileParser.o ./build/VCDScanner.o
 all : $(EXEC_NAME)
 

@@ -10,3 +10,6 @@
 #include "ParseurVCD.h"
 #include "Parseur.h"
 #include "build/VCDTypes.hpp"
+#include "Chronogramme.h"
+#include "Signal.h"
+#include "Trace.h"
