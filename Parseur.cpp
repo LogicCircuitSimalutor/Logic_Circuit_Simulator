@@ -1,5 +1,8 @@
 #include "Parseur.h"
-#include <algorithm>    // std::replace
+#include <stdio.h>
+#include <boost/algorithm/string.hpp>
+#include <string.h>
+#include <ctype.h>
 using namespace std;
 
 
@@ -31,7 +34,8 @@ void Parseur::CreateCircuit()
     nbline++;
     if(UselessLine(line)) continue;
     // cout << "allo " << endl;
-    digraph = line.find("digraph");
+    boost::to_upper(line);
+    digraph = line.find("DIGRAPH");
     int acc = line.find("{");
     if(digraph >=0)
     {
@@ -77,6 +81,8 @@ void Parseur::CreateConnections()
       nbline++;
       if(UselessLine(line)) continue;
       line=CleanLine(line);
+      boost::to_upper(line);
+
       //cout << "ligne lue " << line << endl;
       // if(int(line.find('}'))>=0)
       // {
@@ -91,8 +97,8 @@ void Parseur::CreateConnections()
       { //declaration des connexinos
         // cout << "\t \t iin >= 0 " << endl;
         string in = line.substr(0,iin);
-        int ilabel = line.find("[label=\"SEL\"];");
-        string ss = "[label=\"SEL\"];";
+        int ilabel = line.find("[LABEL=\"SEL\"];");
+        string ss = "[LABEL=\"SEL\"];";
         // cout << ss.size()  << endl<< endl;
         // cout << "\t \t ilabel = " << ilabel << endl;
         bool  sel = 0;
@@ -137,17 +143,26 @@ void Parseur::CreateConnections()
                 Gate * gIn= NULL;
                 Gate * gOut=NULL;
                 MUXx * mOut =NULL;
+                bool notdone = 1;
                 for(std::vector<Gate*>::const_iterator it =m_circuit->getGatesVector()->begin(); it!=m_circuit->getGatesVector()->end(); ++it)
                 {
                   Gate * tmp = *it;
                   if(tmp->getName() == in) gIn=tmp;
                   if(tmp->getName() == out) gOut=tmp;
                 }
-                for(std::vector<Gate*>::const_iterator it =m_circuit->getInputsVector()->begin(); it!=m_circuit->getInputsVector()->end(); ++it)
+                for(std::vector<Gate*>::const_iterator it =m_circuit->getInputsVector()->begin(); it!=m_circuit->getInputsVector()->end() && notdone; ++it)
                 {
                   Gate * tmp = *it;
-                  if(tmp->getName() == in) gIn=tmp;
-                  if(tmp->getName() == out) gOut=tmp;
+                  if(tmp->getName() == in)
+                  {
+                    gIn=tmp;
+                    notdone = 0;
+                  }
+                  if(tmp->getName() == out)
+                  {
+                    gOut=tmp;
+                    notdone = 0;
+                  }
                 }
                 if(sel)
                 {
@@ -217,6 +232,8 @@ void Parseur::CreateGates()
       if(UselessLine(line)) continue;
 
       line=CleanLine(line);
+      boost::to_upper(line);
+
       // if(int(line.find('}'))>=0)
       // {
       //   cout<< "\t\t\t jss mort " << endl;
@@ -231,19 +248,25 @@ void Parseur::CreateGates()
         // cout << "CreateGates::ibracket >= 0" << endl;
         // cout << "ibracket = " << ibracket << endl;
         string name=line.substr(0,ibracket);
-        int ilabel=line.find("label=\"");
+        int ilabel=line.find("LABEL=\"");
         int iarrow = line.find("->");
         if(iarrow > 0 && iarrow < ilabel)
         {
           cout << "slty surement un sel" << endl;
           continue; //surement un sel
         }
-        int ill=line.find("\"]");
+        int ill=line.find("\"];");
         string label="";
         if(ilabel >=0 && ill >=0) label=line.substr(ilabel+7,ill-ilabel-7);
+        //boost::to_upper(label);
+        else{
+          cout << "we have a problem " << endl;
+          exit(1);
+        }
+
         if (label == "" || name == "")
         {
-          cout << "!!!    ERROR : label | line = " << nbline << endl;
+          cout << "!!!    ERROR : label | line = " << nbline << "label = " << label << " name = " << name << endl;
           exit(1);
         }
 
@@ -260,6 +283,7 @@ void Parseur::CreateGates()
           nbinput = stoi(label.substr(label.size()-cntnb,cntnb)) ;
           string typegate = "";
           typegate = label.substr(0,label.size()-cntnb);
+          boost::to_upper(typegate);
           if(nbinput!=0 && !noms.count(name))
           {
             //if(typegate_vector.find(typegate)!=0)
@@ -296,7 +320,12 @@ void Parseur::CreateGates()
               Gate* XOR = new XORx(name, nbinput, 0);
               m_circuit->addGate(XOR);
               noms.insert(name);
-
+            }
+            else if (typegate == "XNOR")
+            {
+              Gate* XNOR = new XNORx(name, nbinput, 0);
+              m_circuit->addGate(XNOR);
+              noms.insert(name);
             }
             else if (typegate == "MUX")
             {
@@ -315,13 +344,15 @@ void Parseur::CreateGates()
           else
           {
             if(nbinput!=0)   cout << "!!!    ERROR : number of inputs | line = " << nbline << endl;
-            else    cout << "!!!    ERROR : name didnt known | line = " << nbline << endl;
+            else    cout << "!!!    ERROR : name arleady known | line = " << nbline << " name = "<< name<< endl;
             exit(1);
           }
           //C'est une gate
         }
         else
         {
+          if(!noms.count(name))
+          {
           if(label=="INPUT")
           {
             cout << " Déclaration de l'entree avec le nom unique " << name << ", un label "<< label <<endl;
@@ -331,15 +362,15 @@ void Parseur::CreateGates()
             // cout << "input = " << name << endl;
 
           }
-         //  else if(label=="OUTPUT")
-         //  {
+          else if(label=="OUTPUT")
+          {
 
-         //   //cout << " Déclaration de la sortie avec le nom unique " << name << ", un label "<< label <<endl;
-         //   // Gate* OUT = new InputGate(name);
-         //   // m_circuit->addGate(OUT);
-         //   noms.insert(name);
+           cout << " Déclaration de la sortie avec le nom unique " << name << ", un label "<< label <<endl;
+           // Gate* OUT = new InputGate(name);
+           // m_circuit->addGate(OUT);
+           noms.insert(name);
 
-         // }
+         }
           else if(label == "NOT")
           {
             cout << " Déclaration de la gate avec le nom unique " << name << " du type NOT, un label "<< label <<endl;
@@ -354,6 +385,12 @@ void Parseur::CreateGates()
             exit(1);
           }
           //C'est une I/O
+        }
+        else
+        {
+          cout << "!!!    ERROR : name arleady known | line = " << nbline << " name = "<< name<< endl;
+exit(1);
+        }
         }
       }//if ibracket>=0
     }//while getline
