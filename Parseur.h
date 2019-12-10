@@ -28,7 +28,7 @@ bool CircuitCreated = 0;
 string m_dot_path = "";
 std::set<string> noms;
 Circuit * m_circuit;
-// std::list<string> ReservedWords ({"INPUT","OUTPUT","NOT","AND","OR","NAND","NOR"});
+std::set<string> ReservedWords {"INPUT","OUTPUT","NOT","AND","OR","NAND","NOR","XOR","XNOR","MUX"};
 public:
 
   	Parseur(string dot_path);
