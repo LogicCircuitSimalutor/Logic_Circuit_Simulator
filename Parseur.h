@@ -15,6 +15,7 @@
 #include "Circuit.h"
 #include <set>
 #include <vector>
+#include <list>
 
 using namespace std;
 
@@ -24,6 +25,7 @@ bool CircuitCreated = 0;
 string m_dot_path = "";
 std::set<string> noms;
 Circuit * m_circuit;
+// std::list<string> ReservedWords ({"INPUT","OUTPUT","NOT","AND","OR","NAND","NOR"});
 public:
 
   	Parseur(string dot_path);
