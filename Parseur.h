@@ -11,6 +11,8 @@
 #include "NANDx.h"
 #include "NORx.h"
 #include "XORx.h"
+#include "XNORx.h"
+
 #include "MUXx.h"
 #include "Circuit.h"
 #include <set>

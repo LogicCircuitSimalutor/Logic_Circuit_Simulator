@@ -321,12 +321,12 @@ void Parseur::CreateGates()
               m_circuit->addGate(XOR);
               noms.insert(name);
             }
-            // else if (typegate == "XNOR")
-            // {
-            //   Gate* XNOR = new XNORx(name, nbinput, 0);
-            //   m_circuit->addGate(XNOR);
-            //   noms.insert(name);
-            // }
+            else if (typegate == "XNOR")
+            {
+              Gate* XNOR = new XNORx(name, nbinput, 0);
+              m_circuit->addGate(XNOR);
+              noms.insert(name);
+            }
             else if (typegate == "MUX")
             {
               MUXx* MUX = new MUXx(name, nbinput, 0);
