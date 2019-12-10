@@ -6,6 +6,7 @@
 #include "NANDx.h"
 #include "NORx.h"
 #include "XORx.h"
+#include "XNORx.h"
 #include "Circuit.h"
 #include "ParseurVCD.h"
 #include "Parseur.h"

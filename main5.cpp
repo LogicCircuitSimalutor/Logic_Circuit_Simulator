@@ -40,6 +40,9 @@ int main(int argc, char const *argv[]){
 	Parseur parseur(dot_path);
 	parseur.Parser();
 
+	cout << parseur << endl;
+	cout << circuit << endl;
+
 	/*>Parse VCD file to get stimuli to apply*/
 	ParseurVCD parseurVCD(vcd_path);
 	parseurVCD.connectCircuit(parseur.getCircuit());
@@ -47,7 +50,6 @@ int main(int argc, char const *argv[]){
 
 	//chrono.TraceClock(int(mapStimuli.size()), X+40, Y);
 
-	//cout << parseur << endl;
 	//cout << parseurVCD << endl;
 
 	circuit = parseur.getCircuit();

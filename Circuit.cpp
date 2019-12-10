@@ -3,6 +3,17 @@
 #include <list>
 #include "Circuit.h"
 
+using namespace std;
+
+void Circuit::print(ostream& out) const{
+	vector <Gate *>::const_iterator itr = m_gates.begin();
+		while(itr != m_gates.end()){
+		Gate * tmp = *itr;
+		out << *tmp << endl;
+		itr++;
+	}
+}
+
 bool Circuit::checkGlobalConnection(){
 	vector <Gate *>::const_iterator itr = m_gates.begin();
 	vector <MUXx * >::const_iterator itr_mux = m_mux.begin();
