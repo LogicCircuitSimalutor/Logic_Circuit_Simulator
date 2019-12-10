@@ -1,8 +1,8 @@
 /*>
-*	This file gathers these follower unit tests : 
+*	This file gathers these follower unit tests :
 *
 *	- Create ANDx Gate with 2, 4, 8 inputs
-* 	- Evaluate Gates multi-inputs with new method of calcul 
+* 	- Evaluate Gates multi-inputs with new method of calcul
 *			if 1 zero in inputs ==> return 0
 *			else return 1
 * 	- Print True table to validate algorithm
@@ -33,7 +33,7 @@ int main(int argc, char const *argv[]){
 	Circuit * circuit = NULL; //init of circuit
 	Chronogramme chrono(NBL, NBC, 255);
 
-	const string output_file(result_file);
+	const string output_file("result.txt");
 	ofstream myFlux(output_file.c_str());
 
 	/*>Parse DOT file in order to create circuit*/
@@ -82,5 +82,5 @@ int main(int argc, char const *argv[]){
 	}else{
 		cout << "Connection error...." << endl;
 		exit(2);
-	}	
+	}
 }
