@@ -111,7 +111,7 @@ void Parseur::CreateConnections()
         }
         else
         {
-          out = line.substr(iin+2,line.size()-iin-4);
+          out = line.substr(iin+2,line.size()-iin-3);
           // cout << "out = " << out <<endl;;
 
         }
@@ -127,7 +127,7 @@ void Parseur::CreateConnections()
               cout << "on voit 3 declarations" <<endl;
               slt =2;
               in2 = out.substr(0,iinn);
-              out2 = out.substr(iinn+2,line.size()-iinn-3);
+              out2 = out.substr(iinn+2,line.size()-iinn-4);
             }
             for(int cpt=0;cpt<slt;cpt++)
             {
@@ -139,7 +139,7 @@ void Parseur::CreateConnections()
               }
               if(noms.count(in) && noms.count(out))
               {
-                cout << "input = " << line << "\t" << in << " se connecte à " << out << endl;
+                // cout << "input = " << line << "\t" << in << " se connecte à " << out << endl;
                 Gate * gIn= NULL;
                 Gate * gOut=NULL;
                 MUXx * mOut =NULL;
@@ -202,7 +202,9 @@ void Parseur::CreateConnections()
                    }
                    else
                    {
-                     cout << "je rentre dans le connectgate " << endl;
+                     // cout << "je rentre dans le connectgate " << endl;
+                     cout  << "\t" << in << " se connecte à " << out << endl;
+
                      gIn->connectGate(gOut);
                    }
                 }
@@ -264,7 +266,7 @@ void Parseur::CreateGates()
         // cout << "CreateGates::ibracket >= 0" << endl;
         // cout << "ibracket = " << ibracket << endl;
         string name=line.substr(0,ibracket);
-        int ilabel=line.find("LABEL=\"");
+        int ilabel=line.find("[LABEL=\"");
         int iarrow = line.find("->");
         if(iarrow > 0 && iarrow < ilabel)
         {
@@ -273,7 +275,7 @@ void Parseur::CreateGates()
         }
         int ill=line.find("\"];");
         string label="";
-        if(ilabel >=0 && ill >=0) label=line.substr(ilabel+7,ill-ilabel-7);
+        if(ilabel >=0 && ill >=0) label=line.substr(ilabel+8,ill-ilabel-8);
         //boost::to_upper(label);
         else{
           cout << "we have a problem " << endl;
@@ -299,9 +301,14 @@ void Parseur::CreateGates()
           nbinput = stoi(label.substr(label.size()-cntnb,cntnb)) ;
           string typegate = "";
           typegate = label.substr(0,label.size()-cntnb);
-          boost::to_upper(typegate);
+          // boost::to_upper(typegate);
           if(nbinput!=0 && !noms.count(name))
           {
+            if(ReservedWords.count(name))
+            {
+              cout << "Reserved Words " << typegate << endl;
+              exit(1);
+            }
             //if(typegate_vector.find(typegate)!=0)
             cout << " Déclaration de la gate avec le nom unique " << name << " du type " << typegate <<  ", un label "<< label << " et il a " << nbinput << " inputs"<<endl;
             if(typegate == "AND")
@@ -367,7 +374,7 @@ void Parseur::CreateGates()
         }
         else
         {
-          if(!noms.count(name))
+          if(!noms.count(name) && !ReservedWords.count(name))
           {
           if(label=="INPUT")
           {
@@ -397,15 +404,15 @@ void Parseur::CreateGates()
           }
           else
           {
-            cout << "!!!    ERROR : type | line = " << line  << endl;
+            cout << "!!!    ERROR : type | line = " << line <<"   "<<name <<"   "<< label << endl;
             exit(1);
           }
           //C'est une I/O
         }
         else
         {
-          cout << "!!!    ERROR : name arleady known | line = " << nbline << " name = "<< name<< endl;
-exit(1);
+          cout << "!!!    ERROR : name arleady known or is a reserved words | line = " << nbline << " name = "<< name<< endl;
+          exit(1);
         }
         }
       }//if ibracket>=0
@@ -451,6 +458,12 @@ ostream& operator <<(ostream& out, const  Parseur &f)
   }
   cout << "Noms des inputs" << endl;
   for(std::vector<Gate*>::const_iterator it =f.m_circuit->getInputsVector()->begin(); it!=f.m_circuit->getInputsVector()->end(); ++it)
+  {
+    Gate * tmp = *it;
+    out << *tmp << endl;
+  }
+  cout << "Noms des outputs" << endl;
+  for(std::vector<Gate*>::const_iterator it =f.m_circuit->getOutputsVector()->begin(); it!=f.m_circuit->getOutputsVector()->end(); ++it)
   {
     Gate * tmp = *it;
     out << *tmp << endl;

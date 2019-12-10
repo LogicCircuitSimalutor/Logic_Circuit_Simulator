@@ -44,9 +44,9 @@ int main(int argc, char const *argv[]){
 	cout << circuit << endl;
 
 	/*>Parse VCD file to get stimuli to apply*/
-	//ParseurVCD parseurVCD(vcd_path);
-	//parseurVCD.connectCircuit(parseur.getCircuit());
-	//parseurVCD.Parser(mapStimuli);
+	// ParseurVCD parseurVCD(vcd_path);
+	// parseurVCD.connectCircuit(parseur.getCircuit());
+	// parseurVCD.Parser(mapStimuli);
 
 	//chrono.TraceClock(int(mapStimuli.size()), X+40, Y);
 
