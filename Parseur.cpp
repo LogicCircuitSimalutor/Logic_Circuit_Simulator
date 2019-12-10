@@ -84,6 +84,8 @@ void Parseur::CreateConnections()
       //   return ;
       // }
       int iin = line.find("->");
+      int nbfleche =0;
+
       string out="";
       if( iin>=0)
       { //declaration des connexinos
@@ -110,62 +112,84 @@ void Parseur::CreateConnections()
           if(in != "" && out !="")
           {
             // cout << "out = " << out <<endl;
-
-            if(noms.count(in) && noms.count(out))
+            int slt =1;
+            int iinn=0;
+            string in2 ="";
+            string out2="";
+            if((iinn = out.find("->") )>=0)
             {
-              cout << "input = " << line << "\t" << in << " se connecte à " << out << endl;
-              Gate * gIn= NULL;
-              Gate * gOut=NULL;
-              MUXx * mOut =NULL;
-              for(std::vector<Gate*>::const_iterator it =m_circuit->getGatesVector()->begin(); it!=m_circuit->getGatesVector()->end(); ++it)
-              {
-                Gate * tmp = *it;
-                if(tmp->getName() == in) gIn=tmp;
-                if(tmp->getName() == out) gOut=tmp;
-              }
-              for(std::vector<Gate*>::const_iterator it =m_circuit->getInputsVector()->begin(); it!=m_circuit->getInputsVector()->end(); ++it)
-              {
-                Gate * tmp = *it;
-                if(tmp->getName() == in) gIn=tmp;
-                if(tmp->getName() == out) gOut=tmp;
-              }
-              if(sel)
-              {
-                for(std::vector<MUXx*>::const_iterator it =m_circuit->getMuxVector()->begin(); it!=m_circuit->getMuxVector()->end(); ++it)
-                {
-                  MUXx * tmp = *it;
-                  if(tmp->getName() == out) mOut=tmp;
-                }
-              }
-              if(gIn!=NULL && (gOut !=NULL || mOut!=NULL))
-              {
-                if(sel && mOut != NULL)
-                {
-                  cout << "\t \t \t J'ai vu un MUX " << endl;
-                  // MUXx(gOut)->connectSel(gIn);
-
-                  mOut->connectSel(gIn);
-                  // gIn->addOutput(gOut);
-                  cout << gOut << endl;
-                //   cout << "\t\t\t\t\t je push" << endl;
-                 }
-                 else
-                 {
-                   cout << "je rentre dans le connectgate " << endl;
-                   gIn->connectGate(gOut);
-                 }
-              }
-                else
-                {
-                  cout << "!!!    ERROR : Input or output didnt known \t in :" << in << " out : " << out << " | line = " << nbline << endl;
-                  exit(1);
-                }
+              cout << "on voit 3 declarations" <<endl;
+              slt =2;
+              in2 = out.substr(0,iinn);
+              out2 = out.substr(iinn+2,line.size()-iinn-3);
             }
-            else
+            for(int cpt=0;cpt<slt;cpt++)
             {
-              cout << "!!!    ERROR : Input or output didnt known \t in :" << in << " out : " << out << " | line = " << nbline << endl;
-              exit(1);
+              if(slt == 2 && cpt ==0)
+              {
+                cout << "on change le in/out" <<endl;
+                in = in;
+                out = in2;
+              }
+              if(noms.count(in) && noms.count(out))
+              {
+                cout << "input = " << line << "\t" << in << " se connecte à " << out << endl;
+                Gate * gIn= NULL;
+                Gate * gOut=NULL;
+                MUXx * mOut =NULL;
+                for(std::vector<Gate*>::const_iterator it =m_circuit->getGatesVector()->begin(); it!=m_circuit->getGatesVector()->end(); ++it)
+                {
+                  Gate * tmp = *it;
+                  if(tmp->getName() == in) gIn=tmp;
+                  if(tmp->getName() == out) gOut=tmp;
+                }
+                for(std::vector<Gate*>::const_iterator it =m_circuit->getInputsVector()->begin(); it!=m_circuit->getInputsVector()->end(); ++it)
+                {
+                  Gate * tmp = *it;
+                  if(tmp->getName() == in) gIn=tmp;
+                  if(tmp->getName() == out) gOut=tmp;
+                }
+                if(sel)
+                {
+                  for(std::vector<MUXx*>::const_iterator it =m_circuit->getMuxVector()->begin(); it!=m_circuit->getMuxVector()->end(); ++it)
+                  {
+                    MUXx * tmp = *it;
+                    if(tmp->getName() == out) mOut=tmp;
+                  }
+                }
+                if(gIn!=NULL && (gOut !=NULL || mOut!=NULL))
+                {
+                  if(sel && mOut != NULL)
+                  {
+                    cout << "\t \t \t J'ai vu un MUX " << endl;
+                    // MUXx(gOut)->connectSel(gIn);
+
+                    mOut->connectSel(gIn);
+                    // gIn->addOutput(gOut);
+                    cout << gOut << endl;
+                  //   cout << "\t\t\t\t\t je push" << endl;
+                   }
+                   else
+                   {
+                     cout << "je rentre dans le connectgate " << endl;
+                     gIn->connectGate(gOut);
+                   }
+                }
+                  else
+                  {
+                    cout << "!!!    ERROR : Input or output didnt known \t in :" << in << " out : " << out << " | line = " << nbline << endl;
+                    exit(1);
+                  }
+              }
+              else
+              {
+                cout << "!!!    ERROR : Input or output didnt known \t in :" << in << " out : " << out << " | line = " << nbline << endl;
+                exit(1);
+              }
+              in=in2;
+              out=out2;
             }
+
           }
           else
           {
