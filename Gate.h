@@ -96,6 +96,8 @@ public:
 		return m_NbINput;
 	}
 
+	bool checkOutputVectorEmpty() const;
+
 	virtual void connectGate(Gate* g) = 0;
 
 	virtual void CalculateOutput();

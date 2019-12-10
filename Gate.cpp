@@ -60,3 +60,11 @@ bool Gate::CheckNumberInputs(){
 	}
 	return true;
 }
+
+bool Gate::checkOutputVectorEmpty() const{
+	if(getSizeOutput()){
+		cout << "Output can't be connected as an input" << endl;
+		return false;
+	}
+	return true;
+}

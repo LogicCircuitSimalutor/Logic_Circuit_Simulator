@@ -15,6 +15,7 @@ void Circuit::print(ostream& out) const{
 }
 
 bool Circuit::checkGlobalConnection(){
+	vector <Gate *>::const_iterator itr_out = m_outputs.begin();
 	vector <Gate *>::const_iterator itr = m_gates.begin();
 	vector <MUXx * >::const_iterator itr_mux = m_mux.begin();
 	while(itr_mux != m_mux.end()){
@@ -30,6 +31,12 @@ bool Circuit::checkGlobalConnection(){
 			return false;
 		}
 		itr++;
+	}
+	while(itr_out != m_outputs.end()){
+		Gate* tmp = *itr_out;
+		if(tmp->checkOutputVectorEmpty()){
+			return false;
+		}
 	}
 	return true;
 }

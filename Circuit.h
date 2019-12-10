@@ -8,6 +8,7 @@
 #include "Gate.h"
 #include "build/VCDTypes.hpp"
 #include "MUXx.h"
+#include "OutputGate.h"
 
 #include "Signal.h"
 #include "Chronogramme.h"
