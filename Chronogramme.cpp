@@ -272,12 +272,14 @@ void Chronogramme::TraceNewSignalLine(int x, int y){
 void Chronogramme::TraceChronogramme(int clk){
     vector<Signal *>::const_iterator itr_signal = getSignalVector()->begin();
     int factor = 2;
+    cout << "Taille de vector signal " << getSignalVector()->size() << endl;
     /*>CLK is null, first value of output, init of chrono*/
     if(!clk){
         while(itr_signal != getSignalVector()->end()){
             Signal * tmp_signal = *itr_signal;
             Gate* tmp_gate = tmp_signal->getAddrGate();
             //We call the trace function in function of logic state of tmp_gate
+            cout << "La valeur de la sortie est " << tmp_gate->getLogicState() << endl;
             if(tmp_gate->getLogicState()){
                 Trace::DrawZeroToOne(this, tmp_signal->getX(), tmp_signal->getY()+1);
             }else{

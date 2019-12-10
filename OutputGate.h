@@ -24,6 +24,8 @@ public:
 
 	void print(ostream& out) const;
 
+	void CalculateOutput();
+
 
 };
 

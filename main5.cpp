@@ -44,9 +44,9 @@ int main(int argc, char const *argv[]){
 	cout << circuit << endl;
 
 	/*>Parse VCD file to get stimuli to apply*/
-	// ParseurVCD parseurVCD(vcd_path);
-	// parseurVCD.connectCircuit(parseur.getCircuit());
-	// parseurVCD.Parser(mapStimuli);
+	ParseurVCD parseurVCD(vcd_path);
+	parseurVCD.connectCircuit(parseur.getCircuit());
+	parseurVCD.Parser(mapStimuli);
 
 	//chrono.TraceClock(int(mapStimuli.size()), X+40, Y);
 
@@ -61,16 +61,16 @@ int main(int argc, char const *argv[]){
 			chrono.TraceNewSignalLine(X, Y);
 					//Sorting of circuit by level
 			if(circuit->sortGate()){
-				// if(circuit->simulate(&mapStimuli, chrono, period, myFlux)){
-				// 	cout << "Simulation finished with success" << endl;
-				// 	cout << chrono << endl;
-				// 	chrono.sauver("chronogramme.bmp");
-				// 	system("eog chronogramme.bmp&");
-				// 	system("gedit result.txt&");
-				// }else{
-				// 	cout << "Simulation failed..." << endl;
-				// 	exit(4);
-				// }
+				if(circuit->simulate(&mapStimuli, chrono, period, myFlux)){
+					cout << "Simulation finished with success" << endl;
+					cout << chrono << endl;
+					chrono.sauver("chronogramme.bmp");
+					system("eog chronogramme.bmp&");
+					system("gedit result.txt&");
+				}else{
+					cout << "Simulation failed..." << endl;
+					exit(4);
+				}
 			}else{
 				cout << "Combinatory loop error..." << endl;
 				exit(3);

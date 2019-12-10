@@ -32,12 +32,12 @@ bool Circuit::checkGlobalConnection(){
 		}
 		itr++;
 	}
-	while(itr_out != m_outputs.end()){
-		Gate* tmp = *itr_out;
-		if(tmp->checkOutputVectorEmpty()){
-			return false;
-		}
-	}
+	// while(itr_out != m_outputs.end()){
+	// 	Gate* tmp = *itr_out;
+	// 	if(tmp->checkOutputVectorEmpty()){
+	// 		return false;
+	// 	}
+	// }
 	return true;
 }
 
@@ -140,6 +140,34 @@ int Circuit::findStartLevel() const{
     return 0; //erreur lors de la recherche de niveau
 }
 
+// bool Circuit::fillOutputsVector(vector<Signal*>* s, int x, int y){
+// 	vector <Gate *>::const_iterator itr = m_inputs.begin();
+// 	while(itr != m_inputs.end()){
+// 		Gate * tmp = *itr;
+// 		x = x + 40;
+// 		s->push_back(new Signal(x,y,tmp));
+// 		itr++;
+// 	}
+// 	itr = m_gates.begin();
+// 	while(itr != m_gates.end()){
+// 		Gate * tmp = *itr;
+// 		if(!(tmp->getSizeOutput())){
+// 			this->addOutput(tmp);
+		
+// 			x = x + 40;
+// 			s->push_back(new Signal(x,y,tmp));
+// 		}
+// 		itr++;
+// 	}
+
+// 	if(!(m_outputs.size())){
+// 		return false; //not possible to have a circuit without output
+// 	}else{
+// 		return true;
+// 	}
+
+// }
+
 bool Circuit::fillOutputsVector(vector<Signal*>* s, int x, int y){
 	vector <Gate *>::const_iterator itr = m_inputs.begin();
 	while(itr != m_inputs.end()){
@@ -148,15 +176,11 @@ bool Circuit::fillOutputsVector(vector<Signal*>* s, int x, int y){
 		s->push_back(new Signal(x,y,tmp));
 		itr++;
 	}
-	itr = m_gates.begin();
-	while(itr != m_gates.end()){
+	itr = m_outputs.begin();
+	while(itr != m_outputs.end()){
 		Gate * tmp = *itr;
-		if(!(tmp->getSizeOutput())){
-			this->addOutput(tmp);
-		
 			x = x + 40;
 			s->push_back(new Signal(x,y,tmp));
-		}
 		itr++;
 	}
 
@@ -179,6 +203,7 @@ bool Circuit::printOutput(ostream& out) const{
 			itr++;
 		}
 		itr = m_outputs.begin();
+		cout << "La taille de outputs vector est : " << m_outputs.size() << endl;
 		while(itr != m_outputs.end()){
 			Gate * tmp = *itr;
 			out << tmp->getName() << " : " << tmp->getLogicState() << endl;
@@ -252,6 +277,14 @@ bool Circuit::sortGate(){
 		level++;
 
 	}
+	levelSorted.clear();
+	itr = m_outputs.begin();
+	while(itr != m_outputs.end()){
+		Gate* tmp = *itr;
+		levelSorted.push_back(tmp);
+		itr++;
+	}
+	m_gateSorted.insert(pair<int, vector<Gate*>>(level,levelSorted));
 	return true;
 }
 
@@ -362,7 +395,7 @@ bool Circuit::simulate(map<int, vector<bool> > * mapStimulis, Chronogramme& c, i
 								if(tmp_gate->getDelta()){
 									tmp_gate->CalculateOutput();
 								}
-								// cout << "Sortie de " << tmp_gate->getName() << " = " << tmp_gate->getLogicState() << endl;
+								 cout << "Sortie de " << tmp_gate->getName() << " = " << tmp_gate->getLogicState() << endl;
 
 								itr_vector++;
 
