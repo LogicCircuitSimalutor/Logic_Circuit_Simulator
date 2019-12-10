@@ -21,7 +21,7 @@ g[label="NOT"];
 h[label="XOR3"];
 i[label="MUX3"];
 
-in1->a;
+in1->a->c;
 in2->a;
 in3->b;
 in4->b;
@@ -37,7 +37,7 @@ g->i;
 in7->i;
 in4->i;
 
-a->c;
+%a->c;
 a->e;
 a->d;
 
