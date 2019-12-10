@@ -111,7 +111,7 @@ void Parseur::CreateConnections()
         }
         else
         {
-          out = line.substr(iin+2,line.size()-iin-3);
+          out = line.substr(iin+2,line.size()-iin-4);
           // cout << "out = " << out <<endl;;
 
         }
@@ -143,25 +143,41 @@ void Parseur::CreateConnections()
                 Gate * gIn= NULL;
                 Gate * gOut=NULL;
                 MUXx * mOut =NULL;
-                bool notdone = 1;
+                bool notdonei = 1;
+                bool notdoneo = 1;
+
                 for(std::vector<Gate*>::const_iterator it =m_circuit->getGatesVector()->begin(); it!=m_circuit->getGatesVector()->end(); ++it)
                 {
                   Gate * tmp = *it;
                   if(tmp->getName() == in) gIn=tmp;
                   if(tmp->getName() == out) gOut=tmp;
                 }
-                for(std::vector<Gate*>::const_iterator it =m_circuit->getInputsVector()->begin(); it!=m_circuit->getInputsVector()->end() && notdone; ++it)
+                for(std::vector<Gate*>::const_iterator it =m_circuit->getOutputsVector()->begin(); it!=m_circuit->getOutputsVector()->end() && notdoneo; ++it)
                 {
                   Gate * tmp = *it;
                   if(tmp->getName() == in)
                   {
                     gIn=tmp;
-                    notdone = 0;
+                    notdoneo = 0;
                   }
                   if(tmp->getName() == out)
                   {
                     gOut=tmp;
-                    notdone = 0;
+                    notdoneo = 0;
+                  }
+                }
+                for(std::vector<Gate*>::const_iterator it =m_circuit->getInputsVector()->begin(); it!=m_circuit->getInputsVector()->end() && notdonei; ++it)
+                {
+                  Gate * tmp = *it;
+                  if(tmp->getName() == in)
+                  {
+                    gIn=tmp;
+                    notdoneo = 0;
+                  }
+                  if(tmp->getName() == out)
+                  {
+                    gOut=tmp;
+                    notdoneo = 0;
                   }
                 }
                 if(sel)
@@ -366,8 +382,8 @@ void Parseur::CreateGates()
           {
 
            cout << " Déclaration de la sortie avec le nom unique " << name << ", un label "<< label <<endl;
-           // Gate* OUT = new InputGate(name);
-           // m_circuit->addGate(OUT);
+            Gate* OUT = new OutputGate(name);
+            m_circuit->addOutput(OUT);
            noms.insert(name);
 
          }

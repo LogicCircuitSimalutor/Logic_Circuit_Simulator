@@ -3,7 +3,7 @@
 #include "OutputGate.h"
 
 void OutputGate::print(ostream& out) const{
-	out << "\t\t ===== INPUT ===== " << endl;
+	out << "\t\t ===== OUTPUT ===== " << endl;
 	out << "Address : " << this << endl;
 	out << "Name : " << this->getName() << endl;
 	out << "Logic value : " << this->getLogicState() << endl;

@@ -5,6 +5,7 @@
 
 #include "Gate.h"
 #include "InputGate.h"
+#include "OutputGate.h"
 #include "ANDx.h"
 #include "ORx.h"
 #include "NOTx.h"
