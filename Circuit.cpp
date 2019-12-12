@@ -15,7 +15,7 @@ void Circuit::print(ostream& out) const{
 }
 
 bool Circuit::checkGlobalConnection(){
-	vector <Gate *>::const_iterator itr_out = m_outputs.begin();
+	vector <Gate *>::const_iterator itr_in = m_inputs.begin();
 	vector <Gate *>::const_iterator itr = m_gates.begin();
 	vector <MUXx * >::const_iterator itr_mux = m_mux.begin();
 	while(itr_mux != m_mux.end()){
@@ -32,17 +32,46 @@ bool Circuit::checkGlobalConnection(){
 		}
 		itr++;
 	}
-	// while(itr_out != m_outputs.end()){
-	// 	Gate* tmp = *itr_out;
-	// 	if(tmp->checkOutputVectorEmpty()){
-	// 		return false;
-	// 	}
-	// }
+	while(itr_in != m_inputs.end()){
+		Gate* tmp = *itr_in;
+		if(tmp->getSizeInput()){
+			cout << "An Input can't be connected in input" << endl;
+			return false;
+		}
+		itr_in++;
+	}
+	if(!(m_inputs.size()) or !(m_gates.size())){
+		cout << "Circuit can't be empty" << endl;
+		return false;
+	}
+	cout << "La taille de vector m_outputs est " << m_outputs.size() << endl;
+	if(!(m_outputs.size())){
+		cout << "Circuit must have at least one output" << endl;
+		return false;
+	}
+	if(!(checkOutputConnected())){
+		return false;
+	}
+	return true;
+}
+
+bool Circuit::checkOutputConnected(){
+	vector <Gate *>::const_iterator itr = m_outputs.begin();
+	while(itr != m_outputs.end()){
+		Gate * tmp = *itr;
+		cout << "Number input " << tmp->CheckNumberInputs() << endl;
+		if(!(tmp->CheckNumberInputs())){
+			cout << "Output must be connected" << endl;
+			return false;
+		}
+		itr++;
+	}
 	return true;
 }
 
 bool Circuit::calculateDelta() const{
 	vector <Gate *>::const_iterator itr = m_gates.begin();
+	vector <Gate *>::const_iterator itr_out = m_outputs.begin();
 	while(itr != m_gates.end()){
 		Gate * tmp = *itr;
 		if(tmp->getDelta()){
@@ -50,6 +79,14 @@ bool Circuit::calculateDelta() const{
 			return true;
 		}
 		itr++;
+	}
+	while(itr_out != m_outputs.end()){
+		Gate * tmp = *itr_out;
+		if(tmp->getDelta()){
+			//cout << "Delta vaut : " << tmp->getDelta() << endl;
+			return true;
+		}
+		itr_out++;
 	}
 	return false;
 }
@@ -203,7 +240,7 @@ bool Circuit::printOutput(ostream& out) const{
 			itr++;
 		}
 		itr = m_outputs.begin();
-		cout << "La taille de outputs vector est : " << m_outputs.size() << endl;
+		//cout << "La taille de outputs vector est : " << m_outputs.size() << endl;
 		while(itr != m_outputs.end()){
 			Gate * tmp = *itr;
 			out << tmp->getName() << " : " << tmp->getLogicState() << endl;
@@ -281,6 +318,7 @@ bool Circuit::sortGate(){
 	itr = m_outputs.begin();
 	while(itr != m_outputs.end()){
 		Gate* tmp = *itr;
+		tmp->setLevel(level);
 		levelSorted.push_back(tmp);
 		itr++;
 	}
@@ -309,7 +347,6 @@ bool Circuit::simulate(map<int, vector<bool> > * mapStimulis, Chronogramme& c, i
 			/*>Wait for next clock cycle */
 			clockCycle++;
 		}else{
-
 			/*> FOR FIRST CLOCK CYCLE, CIRCUIT IS FULL EVALUATED */
 			if(clockCycle == 0){
 				//cout << "Clock 0" << endl;
@@ -326,7 +363,6 @@ bool Circuit::simulate(map<int, vector<bool> > * mapStimulis, Chronogramme& c, i
 
 				/*>START FROM LEVEL WHERE DELTA DIFFERENT OF 0*/
 				if(startLevel){ //if we find a level different of 0
-
 					/*> ================= EVALUATION OF CIRCUIT ================================ */
 
 					map <int, vector <Gate*>>::const_iterator itr = m_gateSorted.begin();
@@ -342,7 +378,6 @@ bool Circuit::simulate(map<int, vector<bool> > * mapStimulis, Chronogramme& c, i
 							// cout << "Nom de la porte calculée : " << tmp_gate->getName() << endl;
 							/*> Evaluate only gate with delta non equal to zero */
 							if(tmp_gate->getDelta()){
-
 								tmp_gate->CalculateOutput();
 
 							}
@@ -362,6 +397,7 @@ bool Circuit::simulate(map<int, vector<bool> > * mapStimulis, Chronogramme& c, i
 
 				/*> DELTA IS NULL, NO GATE NEED TO BE EVALUATED, WAIT FOR NEXT STIMULI, INCREMENT CLOCK CYCLE */
 				}else{
+					itr_clock++;
 					//clockCycle++;
 					//keep last output value
 
@@ -380,7 +416,6 @@ bool Circuit::simulate(map<int, vector<bool> > * mapStimulis, Chronogramme& c, i
 					/*>Calcul de startLevel*/
 					startLevel = findStartLevel();
 					if(startLevel){ //on retourne un niveau correct
-
 						map <int, vector <Gate*>>::const_iterator itr = m_gateSorted.begin();
 						for(int i = 0 ; i < startLevel ; i++){
 							itr++;
@@ -395,7 +430,6 @@ bool Circuit::simulate(map<int, vector<bool> > * mapStimulis, Chronogramme& c, i
 								if(tmp_gate->getDelta()){
 									tmp_gate->CalculateOutput();
 								}
-								 cout << "Sortie de " << tmp_gate->getName() << " = " << tmp_gate->getLogicState(0) << endl;
 
 								itr_vector++;
 
@@ -410,6 +444,7 @@ bool Circuit::simulate(map<int, vector<bool> > * mapStimulis, Chronogramme& c, i
 					}
 
 				}else{
+					itr_clock++;
 					//clockCycle++;
 					//next stimuli
 					//on garde la dernière valeur de sortie

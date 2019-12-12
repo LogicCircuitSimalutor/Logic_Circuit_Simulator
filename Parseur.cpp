@@ -214,9 +214,10 @@ void Parseur::CreateConnections()
                    else
                    {
                      // cout << "je rentre dans le connectgate " << endl;
+                     
                      cout  << "\t" << in << " se connecte à " << out << "et pos =  " << pos << endl;
-
                      gIn->connectGate(gOut, pos);
+                    
                    }
                 }
                   else
@@ -242,7 +243,7 @@ void Parseur::CreateConnections()
           }
 
       }//if iin>=0un
-    }//while getline
+    }//while getline   
   }//if CircuitCreated
 }
 
@@ -289,7 +290,7 @@ void Parseur::CreateGates()
         if(ilabel >=0 && ill >=0) label=line.substr(ilabel+8,ill-ilabel-8);
         //boost::to_upper(label);
         else{
-          cout << "we have a problem " << endl;
+          cout << "Label incomplete" << endl;
           exit(1);
         }
 
