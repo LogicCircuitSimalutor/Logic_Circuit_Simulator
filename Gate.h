@@ -15,6 +15,7 @@ class Gate {
 	bool m_delta;
 	vector <Gate*> m_input;
 	vector <Gate*> m_output;
+	vector <int> m_selectBit;
 	int m_NbINput;
 	int m_level;
 
@@ -44,11 +45,11 @@ public:
 		return m_name;
 	}
 
-	void setLogicState(const bool logic){
+	virtual void setLogicState(const bool logic, int pos = 0){
 		m_logicState = logic;
 	}
 
-	bool getLogicState() const{
+	virtual bool getLogicState(int pos = 0) const{
 		return m_logicState;
 	}
 
@@ -76,9 +77,15 @@ public:
 		return &m_output;
 	}
 
+	const vector <int>* getSelectBit() const{
+		return &m_selectBit;
+	}
+
 	void addInput(Gate* g);
 
 	void addOutput(Gate* g);
+
+	void addBitSelect(int pos);
 
 	void changeDeltaOnOutput();
 
@@ -98,7 +105,7 @@ public:
 
 	bool checkOutputVectorEmpty() const;
 
-	virtual void connectGate(Gate* g) = 0;
+	virtual void connectGate(Gate* g, int pos) = 0;
 
 	virtual void CalculateOutput();
 

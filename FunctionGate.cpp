@@ -5,10 +5,12 @@ FunctionGate::~FunctionGate(){
 
 }
 
-void FunctionGate::connectGate(Gate* g){
+void FunctionGate::connectGate(Gate* g, int pos){
 	 this->addOutput(g);
 
 	 g->addInput(this);
+	 cout << "Je vois que selectBit vaut : " << pos;
+	 g->addBitSelect(pos);
 
 }
 

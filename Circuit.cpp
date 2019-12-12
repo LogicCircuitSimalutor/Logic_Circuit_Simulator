@@ -111,7 +111,7 @@ void Circuit::applyInputs(vector<bool>& InputValues) const{
 		Gate* tmp = *itr;
 		if(itr_sti != InputStimuli->end()){ //on vérifie qu'on ne dépasse pas la taille du vecteur
 			// cout << "Valeur du booléen à appliquer sur : " << tmp->getName() << " vaut : " << *itr_sti << endl;
-			if(tmp->getLogicState() != *itr_sti)
+			if(tmp->getLogicState(0) != *itr_sti)
 			{
 				tmp->setLogicState(*itr_sti);
 				// cout << "Valeur de l'entrée de la porte : " << tmp->getLogicState() << endl;
@@ -395,7 +395,7 @@ bool Circuit::simulate(map<int, vector<bool> > * mapStimulis, Chronogramme& c, i
 								if(tmp_gate->getDelta()){
 									tmp_gate->CalculateOutput();
 								}
-								 cout << "Sortie de " << tmp_gate->getName() << " = " << tmp_gate->getLogicState() << endl;
+								 cout << "Sortie de " << tmp_gate->getName() << " = " << tmp_gate->getLogicState(0) << endl;
 
 								itr_vector++;
 

@@ -19,7 +19,9 @@ e[label="XOR4"];
 f[label="NOR2"];
 g[label="NOT"];
 h[label="XOR3"];
-i[label="MUX3"];
+%i[label="MUX3"];
+
+o[label="OUTPUT"];
 
 in1->a->c;
 in2->a;
@@ -30,12 +32,12 @@ in5->e;
 in6->f;
 in7->g;
 
-in1->i[label="SEL"];
-in2->i[label="SEL"];
+%in1->i[label="SEL"];
+%in2->i[label="SEL"];
 
-g->i;
-in7->i;
-in4->i;
+%g->i;
+%in7->i;
+%in4->i;
 
 %a->c;
 a->e;
@@ -47,7 +49,8 @@ d->e;
 d->f;
 e->h;
 f->h;
-c->h;
+g->h;
 
+h->o;
 
 }

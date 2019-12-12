@@ -15,9 +15,11 @@ InputGate::~InputGate(){
 
 }
 
-void InputGate::connectGate(Gate* g){
+void InputGate::connectGate(Gate* g, int pos){
 	 this->addOutput(g);
 
 	 g->addInput(this);
+	 this->addBitSelect(0);
+	 g->addBitSelect(0);
 
 }

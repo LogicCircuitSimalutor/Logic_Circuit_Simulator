@@ -9,9 +9,14 @@ MUXx::~MUXx(){
 
 }
 
-void MUXx::connectSel(Gate* Sel)
+void MUXx::connectSel(Gate* Sel, int pos)
 {
 	m_vectorSel.push_back(Sel);
+	this->addBitSelection(pos);
+}
+
+void MUXx::addBitSelection(int bit){
+	m_selectBit.push_back(bit);
 }
 
 bool MUXx::checkNumberSelector(){
@@ -28,12 +33,17 @@ void MUXx::CalculateOutput(){
 	int value_sel=0;
 	int itr =0;
 	bool temp_output =0;
+	int temp_bit = 0;
+	const vector <int>* bitSelection = getSelectBit();
+	vector <int>::const_iterator itr_select = bitSelection->begin();
 
 	for(std::vector<Gate*>::iterator itrv=m_vectorSel.begin();itrv!=m_vectorSel.end();itrv++)
 	{
 		Gate * tmp = *itrv;
-		value_sel += (pow(2,itr) * tmp->getLogicState()) ;
+		temp_bit = *itr_select;
+		value_sel += (pow(2,itr) * tmp->getLogicState(temp_bit)) ;
 		itr++;
+		itr_select++;
 	}
 	//cout << "value sel = " << value_sel << endl;
 
@@ -45,7 +55,7 @@ void MUXx::CalculateOutput(){
 	}else{
 		vector <Gate*>::const_iterator itr_gate = getInput()->begin() + value_sel;
 		Gate * tmp_gate = *itr_gate;
-		temp_output = tmp_gate->getLogicState();
+		temp_output = tmp_gate->getLogicState(temp_bit);
 
 	}
 
@@ -60,8 +70,8 @@ void MUXx::CalculateOutput(){
 	// 	itr_gate++;
 	// }
 
-	if(temp_output != this->getLogicState()){
- 		this->setLogicState(temp_output);
+	if(temp_output != this->getLogicState(temp_bit)){
+ 		this->setLogicState(temp_output, temp_bit);
  		this->changeDeltaOnOutput();
 	}
 

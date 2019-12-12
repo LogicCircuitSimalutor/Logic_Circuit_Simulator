@@ -22,7 +22,7 @@ public:
 
 	virtual void CalculateOutput() = 0;
 
-	void connectGate(Gate* g);
+	void connectGate(Gate* g, int pos);
 
 	virtual void print(ostream& out) const;
 

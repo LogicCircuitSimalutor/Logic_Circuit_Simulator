@@ -40,6 +40,10 @@ void Gate::addOutput(Gate* g){
 	m_output.push_back(g);
 }
 
+void Gate::addBitSelect(int pos){
+	m_selectBit.push_back(pos);
+}
+
 void Gate::changeDeltaOnOutput(){
 	vector <Gate * >::const_iterator itr = m_output.begin();
 	while(itr != m_output.end()){
