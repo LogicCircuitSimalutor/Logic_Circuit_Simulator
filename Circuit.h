@@ -74,6 +74,10 @@ public:
 		return &m_gateSorted;
 	}
 
+	int getSizeOutput() const{
+		return m_outputs.size();
+	}
+
 	Gate * getGate(const string & name) const;
 
 	void print(ostream& out) const;
@@ -89,6 +93,8 @@ public:
 	bool deleteGate(const string & name);
 
 	bool checkGlobalConnection();
+
+	bool checkOutputConnected();
 
 	bool calculateDelta() const;
 

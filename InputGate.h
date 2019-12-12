@@ -16,6 +16,7 @@ public:
 	Gate(name, 0, logicState)
 	{
 		setLevel(0);
+		setDelta(0);
 	}
 
 	~InputGate();

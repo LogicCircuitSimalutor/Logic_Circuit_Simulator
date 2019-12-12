@@ -40,8 +40,8 @@ int main(int argc, char const *argv[]){
 	Parseur parseur(dot_path);
 	parseur.Parser();
 
-	cout << parseur << endl;
-	cout << circuit << endl;
+	//cout << parseur << endl;
+	//cout << circuit << endl;
 
 	/*>Parse VCD file to get stimuli to apply*/
 	ParseurVCD parseurVCD(vcd_path);
@@ -49,11 +49,8 @@ int main(int argc, char const *argv[]){
 	parseurVCD.Parser(mapStimuli);
 
 	//chrono.TraceClock(int(mapStimuli.size()), X+40, Y);
-
-	//cout << parseurVCD << endl;
-
+	cout << parseurVCD << endl;
 	circuit = parseur.getCircuit();
-
 	/*>Is the circuit properly wired ?*/
 	if(circuit->checkGlobalConnection()){
 		//fill outpust vector in circuit to get logicstate

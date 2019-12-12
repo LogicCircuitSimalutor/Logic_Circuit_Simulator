@@ -13,9 +13,10 @@ public:
 
 	//Constructeur
 	OutputGate(string name, bool logicState = 0) : 
-	Gate(name, 0, logicState)
+	Gate(name, 1, logicState)
 	{
 		setLevel(0);
+		setDelta(0);
 	}
 
 	~OutputGate();

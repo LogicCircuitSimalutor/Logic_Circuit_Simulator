@@ -8,6 +8,7 @@ void OutputGate::print(ostream& out) const{
 	out << "Name : " << this->getName() << endl;
 	out << "Logic value : " << this->getLogicState() << endl;
 	out << "Delta value : " << this->getDelta() << endl;
+	out << "Level value : " << this->getLevel() << endl;
 	Gate::print(out);
 }
 
