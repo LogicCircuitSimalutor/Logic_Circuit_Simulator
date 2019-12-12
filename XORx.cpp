@@ -9,17 +9,21 @@ XORx::~XORx(){
 
 void XORx::CalculateOutput(){
 	const vector <Gate * >* input = getInput();
+	const vector <int>* bitSelection = getSelectBit();
 	vector <Gate *>::const_iterator itr = input->begin();
+	vector <int>::const_iterator itr_select = bitSelection->begin();
 	Gate * tmp = *itr;
+	int temp_bit = *itr_select;
+	bool temp_output = tmp->getLogicState(temp_bit);
 	itr++;
-	bool temp_output = tmp->getLogicState();
 
 	while(itr != input->end()){
 		Gate * tmp = *itr;
-		temp_output = temp_output ^ tmp->getLogicState();
+		temp_bit = *itr_select;
+		temp_output = temp_output ^ tmp->getLogicState(temp_bit);
 		itr++;
 	}
-	if(temp_output != this->getLogicState()){
+	if(temp_output != this->getLogicState(temp_bit)){
 		this->setLogicState(temp_output);
 		this->changeDeltaOnOutput();
 	}

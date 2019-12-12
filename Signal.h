@@ -14,13 +14,15 @@ public:
 	int m_y;
 	Gate * m_gate;
 	int m_prevLogicState;
+	// int m_selectBit;
 
 	//Constructor
 	Signal(int x, int y, Gate* gate) : 
 	m_x(x),
 	m_y(y),
 	m_gate(gate),
-	m_prevLogicState(0){
+	m_prevLogicState(0)
+	{
 
 	} 
 
@@ -42,6 +44,10 @@ public:
 	int getY() const{
 		return m_y;
 	}
+
+	// int getBit() const{
+	// 	return m_selectBit;
+	// }
 
 	Gate* getAddrGate() const{
 		return m_gate;

@@ -28,12 +28,16 @@ ORx::~ORx(){
 
 void ORx::CalculateOutput(){
 	const vector <Gate *>* input = getInput();
+	const vector <int>* bitSelection = getSelectBit();
 	vector <Gate *>::const_iterator itr = input->begin();
+	vector <int>::const_iterator itr_select = bitSelection->begin();
 	bool temp_output;
+	int temp_bit;
 
 	while(itr != input->end()){
 		Gate * tmp = *itr;
-		temp_output = tmp->getLogicState();
+		temp_bit = *itr_select;
+		temp_output = tmp->getLogicState(temp_bit);
 
 		if(temp_output == 1){
  			itr = input->end();
@@ -42,8 +46,8 @@ void ORx::CalculateOutput(){
 		}
 	}
 
-	if(temp_output != this->getLogicState()){
- 		this->setLogicState(temp_output);
+	if(temp_output != this->getLogicState(temp_bit)){
+ 		this->setLogicState(temp_output, temp_bit);
  		this->changeDeltaOnOutput();
 	}
 

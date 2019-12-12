@@ -13,6 +13,7 @@
 #include "NORx.h"
 #include "XORx.h"
 #include "XNORx.h"
+#include "FA.h"
 
 #include "MUXx.h"
 #include "Circuit.h"
@@ -28,7 +29,7 @@ bool CircuitCreated = 0;
 string m_dot_path = "";
 std::set<string> noms;
 Circuit * m_circuit;
-std::set<string> ReservedWords {"INPUT","OUTPUT","NOT","AND","OR","NAND","NOR","XOR","XNOR","MUX"};
+std::set<string> ReservedWords {"INPUT","OUTPUT","NOT","AND","OR","NAND","NOR","XOR","XNOR","MUX", "FA"};
 public:
 
   	Parseur(string dot_path);

@@ -98,21 +98,32 @@ void Parseur::CreateConnections()
         // cout << "\t \t iin >= 0 " << endl;
         string in = line.substr(0,iin);
         int ilabel = line.find("[LABEL=\"SEL\"];");
-        string ss = "[LABEL=\"SEL\"];";
+        int iCout = line.find("[LABEL=\"COUT\"];");
+        //string ss = "[LABEL=\"SEL\"];";
         // cout << ss.size()  << endl<< endl;
         // cout << "\t \t ilabel = " << ilabel << endl;
         bool  sel = 0;
+        int pos = 0;
         if(ilabel >= 0)
         {
-          cout << "sltyyyyy on a un SEL " << endl;
+          cout << "SEL detected " << endl;
           sel=1;
           out = line.substr(iin+2,line.size()-iin-2-14);
           cout << "sel out = " << out <<endl;
         }
         else
         {
-          out = line.substr(iin+2,line.size()-iin-3);
+           if(iCout >= 0)
+          {
+            cout << "COUT detected" << endl;
+            pos=1;
+            out = line.substr(iin+2,line.size()-iin-2-15);
+            cout << "cout = " << out <<endl;
+          }else{
+            out = line.substr(iin+2,line.size()-iin-3);
           // cout << "out = " << out <<endl;;
+          }
+          
 
         }
           if(in != "" && out !="")
@@ -172,12 +183,12 @@ void Parseur::CreateConnections()
                   if(tmp->getName() == in)
                   {
                     gIn=tmp;
-                    notdoneo = 0;
+                    notdonei = 0;
                   }
                   if(tmp->getName() == out)
                   {
                     gOut=tmp;
-                    notdoneo = 0;
+                    notdonei = 0;
                   }
                 }
                 if(sel)
@@ -195,7 +206,7 @@ void Parseur::CreateConnections()
                     cout << "\t \t \t J'ai vu un MUX " << endl;
                     // MUXx(gOut)->connectSel(gIn);
 
-                    mOut->connectSel(gIn);
+                    mOut->connectSel(gIn, pos);
                     // gIn->addOutput(gOut);
                     cout << gOut << endl;
                   //   cout << "\t\t\t\t\t je push" << endl;
@@ -203,9 +214,9 @@ void Parseur::CreateConnections()
                    else
                    {
                      // cout << "je rentre dans le connectgate " << endl;
-                     cout  << "\t" << in << " se connecte à " << out << endl;
+                     cout  << "\t" << in << " se connecte à " << out << "et pos =  " << pos << endl;
 
-                     gIn->connectGate(gOut);
+                     gIn->connectGate(gOut, pos);
                    }
                 }
                   else
@@ -400,6 +411,14 @@ void Parseur::CreateGates()
             Gate* NOT = new NOTx(name);
             noms.insert(name);
             m_circuit->addGate(NOT);
+
+          }
+          else if(label == "FA")
+          {
+            cout << " Déclaration de la gate avec le nom unique " << name << " du type FA, un label "<< label <<endl;
+            Gate* FAx = new FA(name); //constructeur (nom, logicState)
+            noms.insert(name);
+            m_circuit->addGate(FAx);
 
           }
           else

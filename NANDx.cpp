@@ -29,12 +29,16 @@ NANDx::~NANDx(){
 
 void NANDx::CalculateOutput(){
 	const vector <Gate *>* input = getInput();
+	const vector <int>* bitSelection = getSelectBit();
 	vector <Gate *>::const_iterator itr = input->begin();
+	vector <int>::const_iterator itr_select = bitSelection->begin();
 	bool temp_output;
+	int temp_bit;
 
 	while(itr != input->end()){
 		Gate * tmp = *itr;
-		temp_output = tmp->getLogicState();
+		temp_bit = *itr_select;
+		temp_output = tmp->getLogicState(temp_bit);
 		// cout << "porte nandx value de " << tmp->getName() << " vaut  " << temp_output << endl;
 		if(temp_output == 0){
  			itr = input->end();
@@ -43,9 +47,9 @@ void NANDx::CalculateOutput(){
 		}
 	}
 
-	if(!temp_output != this->getLogicState()){
+	if(!temp_output != this->getLogicState(temp_bit)){
 		// cout << "temp_output = " << !temp_output << endl;
- 		this->setLogicState(!temp_output);
+ 		this->setLogicState(!temp_output, temp_bit);
  		this->changeDeltaOnOutput();
 	}
 

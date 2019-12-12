@@ -20,7 +20,7 @@ public:
 
 	~InputGate();
 
-	void connectGate(Gate* g);
+	void connectGate(Gate* g, int pos);
 
 	void print(ostream& out) const;
 

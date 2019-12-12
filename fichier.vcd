@@ -7,13 +7,13 @@ $comment
 $end
 $timescale 1ps $end
 $scope module logic $end
-$var wire 1 # in1 $end
-$var wire 1 $ in2 $end
-$var wire 1 % in3 $end
-$var wire 1 + in4 $end
-$var wire 1 - in5 $end
-$var wire 1 * in6 $end
-$var wire 1 / in7 $end
+$var wire 1 # IN1 $end
+$var wire 1 $ IN2 $end
+$var wire 1 % IN3 $end
+$var wire 1 + IN4 $end
+$var wire 1 - IN5 $end
+$var wire 1 * IN6 $end
+$var wire 1 / IN7 $end
 $upscope $end
 $enddefinitions $end
 $dumpvars
@@ -90,7 +90,7 @@ $end
 0*
 1/
 #9
-0#
+1#
 1$
 1%
 1+

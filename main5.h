@@ -8,6 +8,7 @@
 #include "NORx.h"
 #include "XORx.h"
 #include "XNORx.h"
+#include "FA.h"
 #include "Circuit.h"
 #include "ParseurVCD.h"
 #include "Parseur.h"
