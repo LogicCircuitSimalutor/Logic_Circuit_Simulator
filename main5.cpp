@@ -33,7 +33,7 @@ int main(int argc, char const *argv[]){
 	Circuit * circuit = NULL; //init of circuit
 	Chronogramme chrono(NBL, NBC, 255);
 
-	const string output_file("result.txt");
+	const string output_file(result_file);
 	ofstream myFlux(output_file.c_str());
 
 	/*>Parse DOT file in order to create circuit*/
@@ -66,7 +66,9 @@ int main(int argc, char const *argv[]){
 					cout << chrono << endl;
 					chrono.sauver("chronogramme.bmp");
 					system("eog chronogramme.bmp&");
-					system("gedit result.txt&");
+					string cmd = "gedit " + result_file + "&";
+					const char *command = cmd.c_str(); 
+					system(command);
 				}else{
 					cout << "Simulation failed..." << endl;
 					exit(4);
