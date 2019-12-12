@@ -21,21 +21,23 @@ void FA::CalculateOutput(){
 		compteur++;
 	}
 	itr++;
-
+	itr_select++;
 	while(itr != input->end()){
 		Gate * tmp = *itr;
 		temp_bit = *itr_select;
 		temp_output = temp_output ^ tmp->getLogicState(temp_bit);
+		cout << tmp->getName() << temp_bit << endl;
 		if(tmp->getLogicState(temp_bit)){
 			compteur++;
 		}
 		itr++;
+		itr_select++;
 	}
 	if(temp_output != this->getLogicState(0)){
 		this->setLogicState(temp_output, 0);
 		this->changeDeltaOnOutput();
 	}
-	cout << "Compteur vaut : " << compteur << endl;
+	//cout << "Compteur vaut : " << compteur << endl;
 	if(compteur >= 2){
 		toto = 1;
 	}else{
@@ -45,7 +47,7 @@ void FA::CalculateOutput(){
 		this->setLogicState(toto, 1);
 		this->changeDeltaOnOutput();
 	}
-	cout << "toto = " << toto << endl;
+	//cout << "toto = " << toto << endl;
 	setDelta(0);
 }
 

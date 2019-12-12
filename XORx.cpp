@@ -16,12 +16,14 @@ void XORx::CalculateOutput(){
 	int temp_bit = *itr_select;
 	bool temp_output = tmp->getLogicState(temp_bit);
 	itr++;
+	itr_select++;
 
 	while(itr != input->end()){
 		Gate * tmp = *itr;
 		temp_bit = *itr_select;
 		temp_output = temp_output ^ tmp->getLogicState(temp_bit);
 		itr++;
+		itr_select++;
 	}
 	if(temp_output != this->getLogicState(temp_bit)){
 		this->setLogicState(temp_output);

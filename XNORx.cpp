@@ -16,12 +16,14 @@ void XNORx::CalculateOutput(){
 	int temp_bit = *itr_select;
 	bool temp_output = tmp->getLogicState(temp_bit);
 	itr++;
+	itr_select++;
 
 	while(itr != input->end()){
 		temp_bit = *itr_select;
 		Gate * tmp = *itr;
 		temp_output = temp_output ^ tmp->getLogicState(temp_bit);
 		itr++;
+		itr_select++;
 	}
 	if(!temp_output != this->getLogicState(temp_bit)){
 		this->setLogicState(!temp_output);
