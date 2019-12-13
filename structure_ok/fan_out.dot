@@ -1,0 +1,15 @@
+digraph test {
+
+I1 [label = "INPUT"];
+I2 [label = "INPUT"];
+
+GATE [label = "AND2" ];
+
+O1 [label = "OUTPUT"];
+O2 [label = "OUTPUT"];
+
+I1 -> GATE -> O1;
+I2 -> GATE;
+
+GATE -> O2;
+}

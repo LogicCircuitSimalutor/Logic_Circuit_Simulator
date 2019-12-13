@@ -1,0 +1,15 @@
+digraph test {
+
+I1 [label = "INPUT"];
+I2 [label = "INPUT"];
+I3 [label = "INPUT"];
+
+MY_AND [label = "AND2" ];
+MY_XOR [label = "XOR2" ];
+
+O [label = "OUTPUT"];
+
+I1 -> MY_AND -> MY_XOR;
+I2 -> MY_AND;
+I3 -> MY_XOR-> O; 
+}

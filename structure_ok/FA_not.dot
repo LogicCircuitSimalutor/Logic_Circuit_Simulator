@@ -1,0 +1,21 @@
+digraph test {
+
+I1 [label = "INPUT"];
+I2 [label = "INPUT"];
+
+GATE [label = "FA" ];
+GATEN [label="NOT"];
+GATEN2 [label="NOT"];
+
+O [label = "OUTPUT"];
+C [label = "OUTPUT"];
+
+I1 -> GATE -> GATEN;
+I2 -> GATE;
+GATE -> GATEN2[label="COUT"];
+I2 -> GATE;
+
+GATEN->O;
+GATEN2->C;
+
+}

@@ -1,0 +1,19 @@
+digraph register {
+
+I1 [label = "INPUT"];
+I2 [label = "INPUT"];
+I3 [label = "INPUT"];
+
+Bascule1 [label = "FF"];
+Bascule2 [label = "FF"];
+Bascule3 [label = "FF"];
+
+O1 [label = "OUTPUT"];
+O2 [label = "OUTPUT"];
+O3 [label = "OUTPUT"];
+
+I1 -> Bascule1 -> O1;
+I2 -> Bascule2 -> O2;
+I3 -> Bascule3 -> O3;
+
+}
