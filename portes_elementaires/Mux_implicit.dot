@@ -1,0 +1,15 @@
+digraph test {
+
+INPUT1 [label = "INPUT"];
+INPUT2 [label = "INPUT"];
+S [label = "INPUT"];
+OUT [label = "OUTPUT"];
+
+MUX1 [label="MUX1"];
+S -> MUX1[label="SEL"];  
+INPUT1 -> MUX1; 
+INPUT2 -> MUX1; 
+
+MUX1 -> OUT;
+
+}

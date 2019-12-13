@@ -1,0 +1,16 @@
+
+digraph test {
+
+I1 [label = "INPUT"];
+I2 [label = "INPUT"];
+
+GATE [label = "XOR4" ];
+
+O [label = "OUTPUT"];
+
+I1 -> GATE -> O;
+I2 -> GATE;
+I1 -> GATE;
+I1 -> GATE;
+
+}

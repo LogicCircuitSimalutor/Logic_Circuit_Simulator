@@ -1,0 +1,13 @@
+digraph test {
+
+I1 [label = "INPUT"];
+I2 [label = "INPUT"];
+
+GATE [label = "NAND2"];
+
+O [label = "OUTPUT"];
+
+I1 -> GATE -> O;
+I2 -> GATE;
+
+}
