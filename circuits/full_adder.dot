@@ -1,0 +1,29 @@
+digraph test {
+
+A [label = "INPUT"];
+B [label = "INPUT"];
+C [label = "INPUT"];
+SUM [label = "OUTPUT"];
+C_out [label = "OUTPUT"];
+
+XOR_in [label = "XOR2" ];
+XOR_out [label = "XOR2" ];
+
+AND_AB [label = "AND2" ];
+AND_C_in [label = "AND2" ];
+OR_C_out [label = "OR2" ];
+
+A -> XOR_in -> XOR_out;
+B -> XOR_in;
+C -> XOR_out -> SUM;
+
+XOR_in -> AND_C_in;
+C -> AND_C_in;
+
+A -> AND_AB;
+B -> AND_AB;
+
+AND_C_in -> OR_C_out -> C_out;
+AND_AB -> OR_C_out ;
+
+}

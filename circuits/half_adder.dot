@@ -1,0 +1,18 @@
+digraph test {
+
+A [label = "INPUT"];
+B [label = "INPUT"];
+
+MY_AND [label = "AND2" ];
+MY_XOR [label = "XOR2" ];
+
+SUM [label = "OUTPUT"];
+CARRY [label = "OUTPUT"];
+
+A -> MY_AND -> CARRY;
+B -> MY_AND;
+
+A -> MY_XOR -> SUM;
+B -> MY_XOR;
+
+}
